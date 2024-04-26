@@ -27,6 +27,7 @@
         <option value="">Company</option>
     </select>
     <button onclick="resetFilters()">Reset Filters</button>
+    <div id="selectedFilters"></div>
     <div id="blogContainer"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -39,7 +40,6 @@
             const csvText = await response.text();
             const parsedData = Papa.parse(csvText, { header: true }).data;
             originalData = parsedData; // Store original data
-            console.log(originalData);
             return parsedData;
         }
 
@@ -74,12 +74,43 @@
             };
 
             data.forEach(entry => {
-                uniqueValues.year.add(entry.Year);
-                uniqueValues.cable.add(entry['Cable Name']);
-                uniqueValues.type.add(entry['Type of incident']);
-                uniqueValues.action.add(entry.Actions);
-                uniqueValues.country.add(entry.Countries);
-                uniqueValues.company.add(entry.Companies);
+                // Split and trim values, then add to the corresponding filter if not empty
+                entry.Year.split(', ').forEach(year => {
+                    const trimmedYear = year.trim();
+                    if (trimmedYear !== '') {
+                        uniqueValues.year.add(trimmedYear);
+                    }
+                });
+                entry['Cable Name'].split(', ').forEach(cable => {
+                    const trimmedCable = cable.trim();
+                    if (trimmedCable !== '') {
+                        uniqueValues.cable.add(trimmedCable);
+                    }
+                });
+                entry['Type of incident'].split(', ').forEach(type => {
+                    const trimmedType = type.trim();
+                    if (trimmedType !== '') {
+                        uniqueValues.type.add(trimmedType);
+                    }
+                });
+                entry.Actions.split(', ').forEach(action => {
+                    const trimmedAction = action.trim();
+                    if (trimmedAction !== '') {
+                        uniqueValues.action.add(trimmedAction);
+                    }
+                });
+                entry.Countries.split(', ').forEach(country => {
+                    const trimmedCountry = country.trim();
+                    if (trimmedCountry !== '') {
+                        uniqueValues.country.add(trimmedCountry);
+                    }
+                });
+                entry.Companies.split(', ').forEach(company => {
+                    const trimmedCompany = company.trim();
+                    if (trimmedCompany !== '') {
+                        uniqueValues.company.add(trimmedCompany);
+                    }
+                });
             });
 
             // Populate dropdown options
@@ -104,14 +135,20 @@
 
             // Generate blog entries
             data.forEach(entry => {
-                if (entry['Year'] && entry['Cable Name'] && entry['Type of incident'] && entry['Actions'] && entry['Countries'] && entry['Companies']) {
+                if (entry.Year) {
                     const blogEntry = document.createElement('div');
-                    blogEntry.innerHTML = `<p><b>${entry['Year']}</b> - ${entry['Details']}</p>`;
+                    blogEntry.innerHTML = `<p><b>${entry.Year}</b> - ${entry.Details}</p>`;
                     container.appendChild(blogEntry);
                 }
             });
         }
 
+        // Initialization
+        fetchCSV().then(data => {
+            console.log(data);
+            originalData = data; // Store original data
+            resetFilters(); // Call resetFilters to display all entries initially
+        });
 
         // Function to reset filters
         function resetFilters() {
@@ -122,8 +159,41 @@
             document.getElementById('countryFilter').value = '';
             document.getElementById('companyFilter').value = '';
 
-            // After resetting, we need to filter the blog entries with the original data
-            //filterBlogEntries();
+            // Generate blog entries with the original data, effectively removing any filters
+            generateBlogEntries(originalData);
+        }
+
+        function updateSelectedFilters() {
+            const selectedFiltersContainer = document.getElementById('selectedFilters');
+            selectedFiltersContainer.innerHTML = ''; // Clear previous selections
+
+            const filters = {
+                year: document.getElementById('yearFilter').value,
+                cable: document.getElementById('cableFilter').value,
+                type: document.getElementById('typeFilter').value,
+                action: document.getElementById('actionFilter').value,
+                country: document.getElementById('countryFilter').value,
+                company: document.getElementById('companyFilter').value
+            };
+
+            let selectedFiltersText = 'Selected Filters: ';
+            let hasSelectedFilters = false;
+
+            for (const [key, value] of Object.entries(filters)) {
+                if (value !== '') {
+                    selectedFiltersText += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}, `;
+                    hasSelectedFilters = true;
+                }
+            }
+
+            if (hasSelectedFilters) {
+                // Remove the last comma and space
+                selectedFiltersText = selectedFiltersText.slice(0, -2);
+                selectedFiltersContainer.textContent = selectedFiltersText;
+                selectedFiltersContainer.textContent = 'boo'; //debug
+            } else {
+                selectedFiltersContainer.textContent = 'No filters selected.';
+            }
         }
 
         // Function to filter blog entries
@@ -136,21 +206,29 @@
             const company = document.getElementById('companyFilter').value;
 
             const filteredData = originalData.filter(entry => {
-                return (year === '' || entry[0] === year) &&
-                       (cable === '' || entry[1].split(', ').includes(cable)) && // Change made here
-                       (type === '' || entry[2].split(', ').includes(type)) && // Change made here
-                       (action === '' || entry[3].split(', ').includes(action)) && // Change made here
-                       (country === '' || entry[4].split(', ').includes(country)) && // Change made here
-                       (company === '' || entry[5].split(', ').includes(company)); // Change made here
+                return (year === '' || entry.Year.split(', ').includes(year)) &&
+                    (cable === '' || entry['Cable Name'].split(', ').includes(cable)) &&
+                    (type === '' || entry['Type of incident'].split(', ').includes(type)) &&
+                    (action === '' || entry.Actions.split(', ').includes(action)) &&
+                    (country === '' || entry.Countries.split(', ').includes(country)) &&
+                    (company === '' || entry.Companies.split(', ').includes(company));
             });
-
+            
             generateBlogEntries(filteredData);
         }
 
-        // Initialization
-        fetchCSV().then(data => {
-            generateBlogEntries(data);
-        });
+    
+        // Call updateSelectedFilters whenever a filter is changed
+        document.getElementById('yearFilter').addEventListener('change', updateSelectedFilters);
+        document.getElementById('cableFilter').addEventListener('change', updateSelectedFilters);
+        document.getElementById('typeFilter').addEventListener('change', updateSelectedFilters);
+        document.getElementById('actionFilter').addEventListener('change', updateSelectedFilters);
+        document.getElementById('countryFilter').addEventListener('change', updateSelectedFilters);
+        document.getElementById('companyFilter').addEventListener('change', updateSelectedFilters);
+
+        // Also call updateSelectedFilters when the page is loaded to initialize the display
+        document.addEventListener('DOMContentLoaded', updateSelectedFilters);  
+        
     </script>
 </body>
 </html>
