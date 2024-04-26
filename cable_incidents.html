@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cable Incidents</title>
+</head>
+<body>
+    <h1>Cable Incidents</h1>
+    <p>Filter by:</p>
+    <select id="yearFilter" onchange="filterBlogEntries()">
+        <option value="">Year</option>
+    </select>
+    <select id="cableFilter" onchange="filterBlogEntries()">
+        <option value="">Cable Name</option>
+    </select>
+    <select id="typeFilter" onchange="filterBlogEntries()">
+        <option value="">Type of incident</option>
+    </select>
+    <select id="actionFilter" onchange="filterBlogEntries()">
+        <option value="">Action</option>
+    </select>
+    <select id="countryFilter" onchange="filterBlogEntries()">
+        <option value="">Country</option>
+    </select>
+    <select id="companyFilter" onchange="filterBlogEntries()">
+        <option value="">Company</option>
+    </select>
+    <button onclick="resetFilters()">Reset Filters</button>
+    <div id="blogContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        let originalData; // Variable to store the original data from CSV
+
+        // Function to fetch and parse the CSV file
+        async function fetchCSV() {
+            const response = await fetch('cable_incidents.csv');
+            const csvText = await response.text();
+            const parsedData = Papa.parse(csvText, { header: true }).data;
+            originalData = parsedData; // Store original data
+            console.log(originalData);
+            return parsedData;
+        }
+
+        // Function to generate blog entries
+        function generateBlogEntries(data) {
+            const container = document.getElementById('blogContainer');
+            container.innerHTML = ''; // Clear previous entries
+
+            const yearFilter = document.getElementById('yearFilter');
+            const cableFilter = document.getElementById('cableFilter');
+            const typeFilter = document.getElementById('typeFilter');
+            const actionFilter = document.getElementById('actionFilter');
+            const countryFilter = document.getElementById('countryFilter');
+            const companyFilter = document.getElementById('companyFilter');
+
+            // Clear previous options
+            yearFilter.innerHTML = '<option value="">Year</option>';
+            cableFilter.innerHTML = '<option value="">Cable Name</option>';
+            typeFilter.innerHTML = '<option value="">Type of incident</option>';
+            actionFilter.innerHTML = '<option value="">Action</option>';
+            countryFilter.innerHTML = '<option value="">Country</option>';
+            companyFilter.innerHTML = '<option value="">Company</option>';
+
+            // Extract unique values for each filter
+            const uniqueValues = {
+                year: new Set(),
+                cable: new Set(),
+                type: new Set(),
+                action: new Set(),
+                country: new Set(),
+                company: new Set()
+            };
+
+            data.forEach(entry => {
+                uniqueValues.year.add(entry.Year);
+                uniqueValues.cable.add(entry['Cable Name']);
+                uniqueValues.type.add(entry['Type of incident']);
+                uniqueValues.action.add(entry.Actions);
+                uniqueValues.country.add(entry.Countries);
+                uniqueValues.company.add(entry.Companies);
+            });
+
+            // Populate dropdown options
+            uniqueValues.year.forEach(value => {
+                yearFilter.innerHTML += `<option value="${value}">${value}</option>`;
+            });
+            uniqueValues.cable.forEach(value => {
+                cableFilter.innerHTML += `<option value="${value}">${value}</option>`;
+            });
+            uniqueValues.type.forEach(value => {
+                typeFilter.innerHTML += `<option value="${value}">${value}</option>`;
+            });
+            uniqueValues.action.forEach(value => {
+                actionFilter.innerHTML += `<option value="${value}">${value}</option>`;
+            });
+            uniqueValues.country.forEach(value => {
+                countryFilter.innerHTML += `<option value="${value}">${value}</option>`;
+            });
+            uniqueValues.company.forEach(value => {
+                companyFilter.innerHTML += `<option value="${value}">${value}</option>`;
+            });
+
+            // Generate blog entries
+            data.forEach(entry => {
+                if (entry['Year'] && entry['Cable Name'] && entry['Type of incident'] && entry['Actions'] && entry['Countries'] && entry['Companies']) {
+                    const blogEntry = document.createElement('div');
+                    blogEntry.innerHTML = `<p><b>${entry['Year']}</b> - ${entry['Details']}</p>`;
+                    container.appendChild(blogEntry);
+                }
+            });
+        }
+
+
+        // Function to reset filters
+        function resetFilters() {
+            document.getElementById('yearFilter').value = '';
+            document.getElementById('cableFilter').value = '';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('actionFilter').value = '';
+            document.getElementById('countryFilter').value = '';
+            document.getElementById('companyFilter').value = '';
+
+            // After resetting, we need to filter the blog entries with the original data
+            //filterBlogEntries();
+        }
+
+        // Function to filter blog entries
+        function filterBlogEntries() {
+            const year = document.getElementById('yearFilter').value;
+            const cable = document.getElementById('cableFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const action = document.getElementById('actionFilter').value;
+            const country = document.getElementById('countryFilter').value;
+            const company = document.getElementById('companyFilter').value;
+
+            const filteredData = originalData.filter(entry => {
+                return (year === '' || entry[0] === year) &&
+                       (cable === '' || entry[1].split(', ').includes(cable)) && // Change made here
+                       (type === '' || entry[2].split(', ').includes(type)) && // Change made here
+                       (action === '' || entry[3].split(', ').includes(action)) && // Change made here
+                       (country === '' || entry[4].split(', ').includes(country)) && // Change made here
+                       (company === '' || entry[5].split(', ').includes(company)); // Change made here
+            });
+
+            generateBlogEntries(filteredData);
+        }
+
+        // Initialization
+        fetchCSV().then(data => {
+            generateBlogEntries(data);
+        });
+    </script>
+</body>
+</html>
