@@ -8,8 +8,8 @@
 <body>
     <h1>Cable Incidents</h1>
     <p>Filter by:</p>
-    <select id="yearFilter" onchange="filterBlogEntries()">
-        <option value="">Year</option>
+    <select id="dateFilter" onchange="filterBlogEntries()">
+        <option value="">Date</option>
     </select>
     <select id="cableFilter" onchange="filterBlogEntries()">
         <option value="">Cable Name</option>
@@ -29,7 +29,7 @@
     <button onclick="resetFilters()">Reset Filters</button>
     <div id="selectedFilters"></div>
     <div id="blogContainer"></div>
-
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
         let originalData; // Variable to store the original data from CSV
@@ -48,7 +48,7 @@
             const container = document.getElementById('blogContainer');
             container.innerHTML = ''; // Clear previous entries
 
-            const yearFilter = document.getElementById('yearFilter');
+            const dateFilter = document.getElementById('dateFilter');
             const cableFilter = document.getElementById('cableFilter');
             const typeFilter = document.getElementById('typeFilter');
             const actionFilter = document.getElementById('actionFilter');
@@ -56,7 +56,7 @@
             const companyFilter = document.getElementById('companyFilter');
 
             // Clear previous options
-            yearFilter.innerHTML = '<option value="">Year</option>';
+            dateFilter.innerHTML = '<option value="">Date</option>';
             cableFilter.innerHTML = '<option value="">Cable Name</option>';
             typeFilter.innerHTML = '<option value="">Type of incident</option>';
             actionFilter.innerHTML = '<option value="">Action</option>';
@@ -65,7 +65,7 @@
 
             // Extract unique values for each filter
             const uniqueValues = {
-                year: new Set(),
+                date: new Set(),
                 cable: new Set(),
                 type: new Set(),
                 action: new Set(),
@@ -75,10 +75,10 @@
 
             data.forEach(entry => {
                 // Split and trim values, then add to the corresponding filter if not empty
-                entry.Year.split(', ').forEach(year => {
-                    const trimmedYear = year.trim();
-                    if (trimmedYear !== '') {
-                        uniqueValues.year.add(trimmedYear);
+                entry.Date.split(', ').forEach(date => {
+                    const trimmedDate = date.trim();
+                    if (trimmedDate !== '') {
+                        uniqueValues.date.add(trimmedDate);
                     }
                 });
                 entry['Cable Name'].split(', ').forEach(cable => {
@@ -114,8 +114,8 @@
             });
 
             // Populate dropdown options
-            uniqueValues.year.forEach(value => {
-                yearFilter.innerHTML += `<option value="${value}">${value}</option>`;
+            uniqueValues.date.forEach(value => {
+                dateFilter.innerHTML += `<option value="${value}">${value}</option>`;
             });
             uniqueValues.cable.forEach(value => {
                 cableFilter.innerHTML += `<option value="${value}">${value}</option>`;
@@ -133,13 +133,20 @@
                 companyFilter.innerHTML += `<option value="${value}">${value}</option>`;
             });
 
+
             // Generate blog entries
             data.forEach(entry => {
-                if (entry.Year) {
-                    const blogEntry = document.createElement('div');
-                    blogEntry.innerHTML = `<p><b>${entry.Year}</b> - ${entry.Details}</p>`;
-                    container.appendChild(blogEntry);
-                }
+                // Parse the date string to extract the month and year
+                const [month, year] = entry.Date.split('/');
+                const date = new Date(year, month - 1); // Note: months are 0-indexed in JavaScript
+                const formattedDate = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+
+                // Use the formatted date in the blog entry
+                const blogEntry = document.createElement('div');
+                // Parse the Description field as Markdown
+                const descriptionHtml = marked.parse(entry.Details);
+                const cleanedDescriptionHtml = descriptionHtml.replace(/<\/?p>/g, '');
+                blogEntry.innerHTML = `<p><b>${formattedDate}</b> - ${cleanedDescriptionHtml}</p>`;                container.appendChild(blogEntry);
             });
         }
 
@@ -152,13 +159,18 @@
 
         // Function to reset filters
         function resetFilters() {
-            document.getElementById('yearFilter').value = '';
+            document.getElementById('dateFilter').value = '';
             document.getElementById('cableFilter').value = '';
             document.getElementById('typeFilter').value = '';
             document.getElementById('actionFilter').value = '';
             document.getElementById('countryFilter').value = '';
             document.getElementById('companyFilter').value = '';
 
+            originalData.sort((a, b) => {
+                const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
+                const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
+                return dateB - dateA; // Sort in descending order
+            });
             // Generate blog entries with the original data, effectively removing any filters
             generateBlogEntries(originalData);
         }
@@ -168,7 +180,7 @@
             selectedFiltersContainer.innerHTML = ''; // Clear previous selections
 
             const filters = {
-                year: document.getElementById('yearFilter').value,
+                date: document.getElementById('dateFilter').value,
                 cable: document.getElementById('cableFilter').value,
                 type: document.getElementById('typeFilter').value,
                 action: document.getElementById('actionFilter').value,
@@ -198,7 +210,7 @@
 
         // Function to filter blog entries
         function filterBlogEntries() {
-            const year = document.getElementById('yearFilter').value;
+            const date = document.getElementById('dateFilter').value;
             const cable = document.getElementById('cableFilter').value;
             const type = document.getElementById('typeFilter').value;
             const action = document.getElementById('actionFilter').value;
@@ -206,7 +218,7 @@
             const company = document.getElementById('companyFilter').value;
 
             const filteredData = originalData.filter(entry => {
-                return (year === '' || entry.Year.split(', ').includes(year)) &&
+                return (date === '' || entry.Date.split(', ').includes(date)) &&
                     (cable === '' || entry['Cable Name'].split(', ').includes(cable)) &&
                     (type === '' || entry['Type of incident'].split(', ').includes(type)) &&
                     (action === '' || entry.Actions.split(', ').includes(action)) &&
@@ -219,7 +231,7 @@
 
     
         // Call updateSelectedFilters whenever a filter is changed
-        document.getElementById('yearFilter').addEventListener('change', updateSelectedFilters);
+        document.getElementById('dateFilter').addEventListener('change', updateSelectedFilters);
         document.getElementById('cableFilter').addEventListener('change', updateSelectedFilters);
         document.getElementById('typeFilter').addEventListener('change', updateSelectedFilters);
         document.getElementById('actionFilter').addEventListener('change', updateSelectedFilters);
