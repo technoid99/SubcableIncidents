@@ -6,6 +6,11 @@
     <title>Cable Incidents</title>
 </head>
 <body>
+
+<!----TODO
+The "No filter selected message is broken"
+After making the Date, just Year the sorting of the entries has flipped to asc
+-->    
     <h1>Cable Incidents</h1>
     <p>Filter by:</p>
     <select id="dateFilter" onchange="filterBlogEntries()">
@@ -56,7 +61,7 @@
             const companyFilter = document.getElementById('companyFilter');
 
             // Clear previous options
-            dateFilter.innerHTML = '<option value="">Date</option>';
+            dateFilter.innerHTML = '<option value="">Year</option>';
             cableFilter.innerHTML = '<option value="">Cable Name</option>';
             typeFilter.innerHTML = '<option value="">Type of incident</option>';
             actionFilter.innerHTML = '<option value="">Action</option>';
@@ -72,6 +77,17 @@
                 country: new Set(),
                 company: new Set()
             };
+
+            // Extract unique years for each entry
+            data.forEach(entry => {
+                const year = entry.Date.split('/')[1]; // Assuming the date format is MM/YYYY
+                uniqueValues.date.add(year);
+            });
+
+            // Populate the date dropdown with unique years
+            uniqueValues.date.forEach(year => {
+                dateFilter.innerHTML += `<option value="${year}">${year}</option>`;
+            });
 
             data.forEach(entry => {
                 // Split and trim values, then add to the corresponding filter if not empty
@@ -114,9 +130,6 @@
             });
 
             // Populate dropdown options
-            uniqueValues.date.forEach(value => {
-                dateFilter.innerHTML += `<option value="${value}">${value}</option>`;
-            });
             uniqueValues.cable.forEach(value => {
                 cableFilter.innerHTML += `<option value="${value}">${value}</option>`;
             });
@@ -133,6 +146,12 @@
                 companyFilter.innerHTML += `<option value="${value}">${value}</option>`;
             });
 
+            // Sort the filtered entries by month and year
+            data.sort((a, b) => {
+                const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
+                const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
+                return dateA - dateB; // Sort in ascending order by default
+            });
 
             // Generate blog entries
             data.forEach(entry => {
@@ -171,6 +190,7 @@
                 const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
                 return dateB - dateA; // Sort in descending order
             });
+
             // Generate blog entries with the original data, effectively removing any filters
             generateBlogEntries(originalData);
         }
@@ -217,15 +237,25 @@
             const country = document.getElementById('countryFilter').value;
             const company = document.getElementById('companyFilter').value;
 
+            // After filtering the entries based on the selected filters
             const filteredData = originalData.filter(entry => {
-                return (date === '' || entry.Date.split(', ').includes(date)) &&
+                const entryYear = entry.Date.split('/')[1]; // Extract the year from the entry's date
+                return (date === '' || entryYear === date) &&
                     (cable === '' || entry['Cable Name'].split(', ').includes(cable)) &&
                     (type === '' || entry['Type of incident'].split(', ').includes(type)) &&
                     (action === '' || entry.Actions.split(', ').includes(action)) &&
                     (country === '' || entry.Countries.split(', ').includes(country)) &&
                     (company === '' || entry.Companies.split(', ').includes(company));
             });
-            
+
+            // Sort the filtered entries by month and year
+            filteredData.sort((a, b) => {
+                const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
+                const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
+                return dateA - dateB; // Sort in ascending order by default
+            });
+
+            // Now, generate the blog entries with the sorted and filtered data
             generateBlogEntries(filteredData);
         }
 
