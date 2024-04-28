@@ -9,7 +9,6 @@
 
 <!----TODO
 The "No filter selected message is broken"
-After making the Date, just Year the sorting of the entries has flipped to asc
 -->    
     <h1>Cable Incidents</h1>
     <p>Filter by:</p>
@@ -150,7 +149,7 @@ After making the Date, just Year the sorting of the entries has flipped to asc
             data.sort((a, b) => {
                 const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
                 const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
-                return dateA - dateB; // Sort in ascending order by default
+                return dateB - dateA; // Sort in descending order
             });
 
             // Generate blog entries
@@ -252,7 +251,7 @@ After making the Date, just Year the sorting of the entries has flipped to asc
             filteredData.sort((a, b) => {
                 const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
                 const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
-                return dateA - dateB; // Sort in ascending order by default
+                return dateB - dateA; // Sort in descending order
             });
 
             // Now, generate the blog entries with the sorted and filtered data
