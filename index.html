@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <div class="container-fluid" style="background-color: lightgrey;">
+    <div class="container-fluid" style="background-color: rgb(228, 231, 237);">
     
         <div class="container">
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-4">
@@ -275,6 +275,9 @@
         }
 
 
+        // Variable to store the filtered data
+        let filteredData = [];
+
         // Function to filter blog entries
         function filterBlogEntries(searchQuery = '') {
             // Retrieve current filter values
@@ -286,7 +289,7 @@
             const company = document.getElementById('companyFilter').value;
 
             // Filter the entries based on the selected filters and search query
-            const filteredData = originalData.filter(entry => {
+            filteredData = originalData.filter(entry => {
                 const entryYear = entry.Date.split('/')[1]; // Extract the year from the entry's date
                 const searchMatch = searchQuery === '' || entry.Details.toLowerCase().includes(searchQuery.toLowerCase());
                 return searchMatch &&
@@ -343,7 +346,7 @@
             // Event listener for the sort order dropdown
             document.getElementById('sortOrder').addEventListener('change', function() {
                 const sortOrder = this.value; // Get the current sort order from the dropdown
-                const sortedData = sortData(originalData, sortOrder);
+                const sortedData = sortData(filteredData, sortOrder);
                 generateBlogEntries(sortedData, sortOrder); // Pass the sort order to generateBlogEntries
             });
 
