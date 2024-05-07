@@ -14,35 +14,54 @@
 </head>
 <body>
 
-<!----TODO
-The "No filter selected message is broken"
--->    
-
     <div class="container-fluid" style="background-color: lightgrey;">
-        <div class="container" id="searchPanel" style="padding: 20px;"">
+    
+        <div class="container">
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-4">
+                <a class="navbar-brand" href="#">LOGO</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv">Download Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                  </ul>
+                </div>
+            </nav> 
+        </div>
+
+        <div class="container" id="searchPanel" style="padding: 20px; margin-top: 50px;">
             <h1>Cable Incidents</h1>
-            <span>Search cable incidents:</span>
+            <span>Start typing to filter cable incidents:</span>
 
             <div class="row justify-content-start">
 
-                <div class="col">
+                <div class="col-6">
                     <div class="input-group">
                         <span class="input-group-text">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
                             </svg>
                         </span>
-                        <input class="form-control search" type="search" id="searchBox" placeholder="Start typing to filter..." autocomplete="off">
+                        <input class="form-control search" type="search" id="searchBox" placeholder="Search..." autocomplete="off">
                         <!-- <button id="searchButton"  type="button" class="btn btn-primary">Search</button> -->
-                    
-                        <button type="button" class="btn btn-outline-secondary" style="margin-left: 5px; margin-right: 5px; background-color: white;" onclick="resetFilters()">Reset</button>          
-                        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#SearchFilters" aria-expanded="false" aria-controls="SearchFilters">
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#SearchFilters" aria-expanded="false" aria-controls="SearchFilters"> 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
                                 <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"></path>
                             </svg>
                         </button>
-                    
-                    </div> 
+                    </div>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-outline-primary" style="margin-left: 5px; margin-right: 5px;" onclick="resetFilters()">Clear All</button>          
                 </div>
                 <div class="col">
                     
@@ -50,10 +69,11 @@ The "No filter selected message is broken"
             </div>
 
             <div class="row align-items-center collapse" id="SearchFilters">
+                <p></p>
                 <span>Filters:</span>
                 <div class="col-2">
-                    <select id="dateFilter" class="form-select form-select-sm">
-                        <option value="">Date</option>
+                    <select id="yearFilter" class="form-select form-select-sm">
+                        <option value="">Year</option>
                     </select>
                 </div>
                 <div class="col-2">
@@ -72,8 +92,8 @@ The "No filter selected message is broken"
                     </select>
                 </div>
                 <div class="col-2">
-                    <select id="actionFilter" class="form-select form-select-sm">
-                        <option value="">Action</option>
+                    <select id="causeFilter" class="form-select form-select-sm">
+                        <option value="">Causes</option>
                     </select>
                 </div>
                 <div class="col-2">
@@ -84,11 +104,22 @@ The "No filter selected message is broken"
             </div>
         </div>
     </div>
+
     <div class="container-fluid" style="background-color: white;">
 
         <div class="container" id="resultsPanel">
-            <div id="resultsNumber" style="margin-top: 20px;"></div>
-            <div id="blogContainer"></div>
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div id="resultsNumber" style="margin-top: 20px; margin-bottom: 10px; color: rgb(126, 122, 122)"></div>
+                        <select id="sortOrder" class="form-select form-select-sm" style="width: auto;">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                    <div id="blogContainer"></div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -113,24 +144,39 @@ The "No filter selected message is broken"
 
         // Function to populate filter options
         function populateFilterOptions(data) {
-            const filters = ['dateFilter', 'cableFilter', 'typeFilter', 'actionFilter', 'countryFilter', 'companyFilter'];
+            // Initialize filter dropdowns with a default option
+            const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
             filters.forEach(filterId => {
                 const filterElement = document.getElementById(filterId);
                 filterElement.innerHTML = `<option value="">${filterId.replace('Filter', '')}</option>`;
             });
 
+            // Extract unique years for the yearFilter and sort them in descending order
+            const uniqueYears = new Set();
+            data.forEach(entry => {
+                const year = entry.Date.split('/')[1]; // Extract the year part from the date string
+                uniqueYears.add(year);
+            });
+            const sortedYears = Array.from(uniqueYears).sort((a, b) => b - a); // Sort in descending order
+
+            // Populate the yearFilter dropdown with unique years
+            const yearFilterElement = document.getElementById('yearFilter');
+            sortedYears.forEach(year => {
+                yearFilterElement.innerHTML += `<option value="${year}">${year}</option>`;
+            });
+
             // Extract unique values for each filter
             const uniqueValues = {
-                date: new Set(),
+                year: new Set(),
                 cable: new Set(),
                 type: new Set(),
-                action: new Set(),
+                cause: new Set(),
                 country: new Set(),
                 company: new Set()
             };
 
             data.forEach(entry => {
-                ['Date', 'Cable Name', 'Type of incident', 'Actions', 'Countries', 'Companies'].forEach((key, index) => {
+                ['Date', 'Cable Name', 'Type of incident', 'Causes', 'Countries', 'Companies'].forEach((key, index) => {
                     entry[key].split(', ').forEach(value => {
                         const trimmedValue = value.trim();
                         if (trimmedValue !== '') {
@@ -146,8 +192,8 @@ The "No filter selected message is broken"
                 sortedValues[key] = Array.from(uniqueValues[key]).sort();
             });
 
-            // Populate dropdown options with sorted values
-            filters.forEach(filterId => {
+            // Populate dropdown options with sorted values, excluding the yearFilter
+            filters.filter(filterId => filterId !== 'yearFilter').forEach(filterId => {
                 const filterElement = document.getElementById(filterId);
                 const values = sortedValues[filterId.replace('Filter', '')];
                 values.forEach(value => {
@@ -156,35 +202,16 @@ The "No filter selected message is broken"
             });
         }
 
-        // Function to sort the data
-        function sortData(data) {
+        // Function to sort based on input. Created for resultsPanel
+        function sortData(data, order) {
             return data.sort((a, b) => {
                 const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
                 const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
-                return dateB - dateA; // Sort in descending order
+                return order === 'newest' ? dateB - dateA : dateA - dateB; // Sort in descending or ascending order based on the order parameter
             });
         }
 
-        // Function to generate blog entries
-        function generateBlogEntries(data) {
-            clearContainer();
-            populateFilterOptions(data);
-            const sortedData = sortData(data);
-
-            sortedData.forEach(entry => {
-                const [month, year] = entry.Date.split('/');
-                const date = new Date(year, month - 1); // Note: months are 0-indexed in JavaScript
-                const formattedDate = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-
-                const blogEntry = document.createElement('div');
-                const descriptionHtml = marked.parse(entry.Details);
-                const cleanedDescriptionHtml = descriptionHtml.replace(/<\/?p>/g, '');
-                blogEntry.innerHTML = `<p><b>${formattedDate}</b> - ${cleanedDescriptionHtml}</p>`;
-                document.getElementById('blogContainer').appendChild(blogEntry);
-            });
-        }
-
-        // Calculates the number of displayed results
+        // Function to update the results count
         function updateResultsCount() {
             const resultsContainer = document.getElementById('blogContainer');
             const resultsCount = resultsContainer.children.length;
@@ -192,14 +219,45 @@ The "No filter selected message is broken"
             resultsNumberElement.textContent = `Showing ${resultsCount} result(s)`;
         }
 
+        // Function to generate blog entries
+        function generateBlogEntries(data, sortOrder) {
+            clearContainer();
+            populateFilterOptions(data);
+            const sortedData = sortData(data, sortOrder);
+
+            sortedData.forEach(entry => {
+                const [month, year] = entry.Date.split('/');
+                const date = new Date(year, month - 1); // Note: months are 0-indexed in JavaScript
+                const formattedDate = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+                // Create a Bootstrap card for each entry
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.margin = '10px';
+
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                const descriptionHtml = marked.parse(entry.Details);
+                const cleanedDescriptionHtml = descriptionHtml.replace(/<\/?p>/g, '');
+
+                cardBody.innerHTML = `<p><b>${formattedDate}</b> - ${cleanedDescriptionHtml}</p>`;
+
+                card.appendChild(cardBody);
+                document.getElementById('blogContainer').appendChild(card);
+            });
+
+            // Update the results count after generating the entries
+            updateResultsCount();
+        }
+
         // Function to reset filters
         function resetFilters() {
             document.getElementById('searchBox').value = '';
-            document.getElementById('dateFilter').value = '';
-            document.getElementById('dateFilter').value = '';
+            document.getElementById('yearFilter').value = '';
             document.getElementById('cableFilter').value = '';
             document.getElementById('typeFilter').value = '';
-            document.getElementById('actionFilter').value = '';
+            document.getElementById('causeFilter').value = '';
             document.getElementById('countryFilter').value = '';
             document.getElementById('companyFilter').value = '';
 
@@ -220,10 +278,10 @@ The "No filter selected message is broken"
         // Function to filter blog entries
         function filterBlogEntries(searchQuery = '') {
             // Retrieve current filter values
-            const date = document.getElementById('dateFilter').value;
+            const year = document.getElementById('yearFilter').value;
             const cable = document.getElementById('cableFilter').value;
             const type = document.getElementById('typeFilter').value;
-            const action = document.getElementById('actionFilter').value;
+            const cause = document.getElementById('causeFilter').value;
             const country = document.getElementById('countryFilter').value;
             const company = document.getElementById('companyFilter').value;
 
@@ -232,10 +290,10 @@ The "No filter selected message is broken"
                 const entryYear = entry.Date.split('/')[1]; // Extract the year from the entry's date
                 const searchMatch = searchQuery === '' || entry.Details.toLowerCase().includes(searchQuery.toLowerCase());
                 return searchMatch &&
-                    (date === '' || entryYear === date) &&
+                    (year === '' || entryYear === year) &&       
                     (cable === '' || entry['Cable Name'].split(', ').includes(cable)) &&
                     (type === '' || entry['Type of incident'].split(', ').includes(type)) &&
-                    (action === '' || entry.Actions.split(', ').includes(action)) &&
+                    (cause === '' || entry.Causes.split(', ').includes(cause)) &&
                     (country === '' || entry.Countries.split(', ').includes(country)) &&
                     (company === '' || entry.Companies.split(', ').includes(company));
             });
@@ -249,32 +307,46 @@ The "No filter selected message is broken"
 
             // After filtering, update the results count
             updateResultsCount();
+
+            // Retrieve the current sort order from the dropdown
+            const sortOrder = document.getElementById('sortOrder').value;
+
+            // Sort the filtered entries based on the current sort order
+            const sortedData = sortData(filteredData, sortOrder);
             
             // Now, generate the blog entries with the sorted and filtered data
-            generateBlogEntries(filteredData);
+            generateBlogEntries(sortedData, sortOrder);
         }
-
-        // Initialization
-        fetchCSV().then(data => {
-            console.log(data);
-            originalData = data; // Store original data
-            resetFilters(); // Call resetFilters to display all entries initially
-        });
 
         // Event listeners for the search box and filter dropdowns:
         document.addEventListener('DOMContentLoaded', function() {
+            // Setting the initial sort order when the page loads
+            fetchCSV().then(data => {
+                originalData = data; // Store original data
+                const defaultSortOrder = "newest"; // Set your default sort order here
+                generateBlogEntries(data, defaultSortOrder); // Pass the default sort order to generateBlogEntries
+            });
+
             // Event listener for the search box
             document.getElementById('searchBox').addEventListener('input', function() {
                 filterBlogEntries(this.value);
             });
 
             // Event listeners for the filter dropdowns
-            const filters = ['dateFilter', 'cableFilter', 'typeFilter', 'actionFilter', 'countryFilter', 'companyFilter'];
+            const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
             filters.forEach(filterId => {
                 document.getElementById(filterId).addEventListener('change', function() {
                     filterBlogEntries();
                 });
             });
+
+            // Event listener for the sort order dropdown
+            document.getElementById('sortOrder').addEventListener('change', function() {
+                const sortOrder = this.value; // Get the current sort order from the dropdown
+                const sortedData = sortData(originalData, sortOrder);
+                generateBlogEntries(sortedData, sortOrder); // Pass the sort order to generateBlogEntries
+            });
+
         });
         
     </script>
