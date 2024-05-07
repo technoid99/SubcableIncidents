@@ -1,3 +1,4 @@
+<!--TODO: Responsive gui for filters and aesthetics-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,35 +69,35 @@
                 </div>
             </div>
 
-            <div class="row align-items-center collapse" id="SearchFilters">
+            <div class="row collapse" id="SearchFilters">
                 <p></p>
                 <span>Filters:</span>
-                <div class="col-2">
+                <div class="col m-1">
                     <select id="yearFilter" class="form-select form-select-sm">
                         <option value="">Year</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col m-1">
                     <select id="countryFilter" class="form-select form-select-sm">
                         <option value="">Country</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col">
                     <select id="cableFilter" class="form-select form-select-sm">
                         <option value="">Cable Name</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col">
                     <select id="typeFilter" class="form-select form-select-sm">
                         <option value="">Type of incident</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col">
                     <select id="causeFilter" class="form-select form-select-sm">
                         <option value="">Causes</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col">
                     <select id="companyFilter" class="form-select form-select-sm">
                         <option value="">Company</option>
                     </select>
@@ -111,8 +112,8 @@
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div id="resultsNumber" style="margin-top: 20px; margin-bottom: 10px; color: rgb(126, 122, 122)"></div>
-                        <select id="sortOrder" class="form-select form-select-sm" style="width: auto;">
+                        <div id="resultsNumber" class="align-bottom" style="margin: 10px; margin-bottom:5px; color: rgb(126, 122, 122)"></div>
+                        <select id="sortOrder" class="form-select form-select-sm" style="margin: 10px; margin-bottom:5px; width: auto;">
                             <option value="newest">Newest First</option>
                             <option value="oldest">Oldest First</option>
                         </select>
