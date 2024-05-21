@@ -1,4 +1,3 @@
-<!--TODO: Responsive gui for filters and aesthetics-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,107 +7,83 @@
     <!-- Include marked for Markdown and Papaparse for CSV parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <!-- Include Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>        
+    <!--include Tailwind CSS-->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
+    </style>
+    <!-- Include Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
-<body>
+<body class="bg-gray-100">
+    <div class="max-w-3xl mx-auto p-6">
 
-    <div class="container-fluid" style="background-color: rgb(228, 231, 237);">
-    
-        <div class="container">
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-4">
-                <a class="navbar-brand" href="#">LOGO</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv">Download Data</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                  </ul>
-                </div>
-            </nav> 
+        <!--search bar-->
+        <div class="flex items-center bg-white rounded-lg shadow p-4 mb-6">
+            <div class="flex-grow flex items-center">
+                <i class="fas fa-search text-gray-400 mr-3"></i>
+                <input type="search" id="searchBox" placeholder="Keyword search for cable incidents and events..." class="w-full text-sm text-gray-800 placeholder-gray-400 border-none p-2">
+            </div>
+            <button id="filterToggle" class="ml-4 text-blue-500">
+                <i class="fas fa-filter"></i>
+            </button>
         </div>
 
-        <div class="container" id="searchPanel" style="padding: 20px; margin-top: 50px;">
-            <h1>Cable Incidents</h1>
-            <span>Start typing to filter cable incidents:</span>
-
-            <div class="row justify-content-start">
-
-                <div class="col-6">
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                        </span>
-                        <input class="form-control search" type="search" id="searchBox" placeholder="Search..." autocomplete="off">
-                        <!-- <button id="searchButton"  type="button" class="btn btn-primary">Search</button> -->
-                        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#SearchFilters" aria-expanded="false" aria-controls="SearchFilters"> 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
-                                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn-outline-primary" style="margin-left: 5px; margin-right: 5px;" onclick="resetFilters()">Clear All</button>          
-                </div>
-                <div class="col">
-                    
-                </div>
+        <!--filter panel-->
+        <div id="SearchFilters" class="hidden bg-white rounded-lg shadow p-6 mb-6">
+            <div class="flex items-center mb-4">
+                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Year</label>
+                <select id="yearFilter" class="w-full sm:w-3/4 text-sm text-gray-800 bg-gray-50 rounded-lg border border-gray-300 p-2">
+                    <option>Year</option>
+                </select>
+            </div>
+            <div class="flex items-center mb-4">
+                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Cable Name</label>
+                <select id="cableFilter" class="w-full sm:w-3/4 text-sm text-gray-800 bg-gray-50 rounded-lg border border-gray-300 p-2">
+                    <option>Cable Name</option>
+                </select>
+            </div>
+            <div class="flex items-center mb-4">
+                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Type of Incident</label>
+                <select id="typeFilter" class="w-full sm:w-3/4 text-sm text-gray-800 bg-gray-50 rounded-lg border border-gray-300 p-2">
+                    <option>Type of Incident</option>
+                </select>
+            </div>
+            <div class="flex items-center mb-4">
+                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Cause</label>
+                <select id="causeFilter" class="w-full sm:w-3/4 text-sm text-gray-800 bg-gray-50 rounded-lg border border-gray-300 p-2">
+                    <option>Cause</option>
+                </select>
+            </div>
+            <div class="flex items-center mb-4">
+                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Country</label>
+                <select id="countryFilter" class="w-full sm:w-3/4 text-sm text-gray-800 bg-gray-50 rounded-lg border border-gray-300 p-2">
+                    <option>Country</option>
+                </select>
+            </div>
+            <div class="flex items-center mb-4">
+                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Company</label>
+                <select id="companyFilter" class="w-full sm:w-3/4 text-sm text-gray-800 bg-gray-50 rounded-lg border border-gray-300 p-2">
+                    <option>Company</option>
+                </select>
             </div>
 
-            <div class="row collapse" id="SearchFilters">
-                <p></p>
-                <span>Filters:</span>
-                <div class="col m-1">
-                    <select id="yearFilter" class="form-select form-select-sm">
-                        <option value="">Year</option>
-                    </select>
-                </div>
-                <div class="col m-1">
-                    <select id="countryFilter" class="form-select form-select-sm">
-                        <option value="">Country</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <select id="cableFilter" class="form-select form-select-sm">
-                        <option value="">Cable Name</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <select id="typeFilter" class="form-select form-select-sm">
-                        <option value="">Type of incident</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <select id="causeFilter" class="form-select form-select-sm">
-                        <option value="">Causes</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <select id="companyFilter" class="form-select form-select-sm">
-                        <option value="">Company</option>
-                    </select>
-                </div> 
+            <!-- Buttons for clearing and applying filters -->
+            <div class="flex justify-end mt-4">
+                <button type="button" class="text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white px-4 py-2 rounded transition duration-200 ease-in-out " onclick="filterBlogEntries()">Apply Filter</button>
+                <button type="button" class="text-gray-700 border border-gray-300 hover:bg-gray-200 hover:text-white px-4 py-2 rounded transition duration-200 ease-in-out ml-2" onclick="resetFilters()">Clear All</button>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid" style="background-color: white;">
+        <div class="row mb-6" id="activefilters"></div>
 
-        <div class="container" id="resultsPanel">
+
+        <div class="bg-white rounded-lg shadow p-6" id="resultsPanel">
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -122,7 +97,35 @@
                 </div>
             </div>
         </div>
-
+    </div>
+    
+    <div class="container-fluid" style="background-color: white;">
+        <div class="container" id="resultsPanelx">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div id="resultsNumber" class="align-bottom" style="margin: 10px; margin-bottom:5px; color: rgb(126, 122, 122)"></div>
+                        <select id="sortOrder" class="form-select form-select-sm" style="margin: 10px; margin-bottom:5px; width: auto;">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#chartDisplay" aria-expanded="false" aria-controls="chartDisplay">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M7.25 6a.75.75 0 0 0-.75.75v7.5a.75.75 0 0 0 1.5 0v-7.5A.75.75 0 0 0 7.25 6ZM12 6a.75.75 0 0 0-.75.75v4.5a.75.75 0 0 0 1.5 0v-4.5A.75.75 0 0 0 12 6Zm4.75a.75.75 0 0 1 1.5 0v9.5a.75.75 0 0 1-1.5 0v-9.5Z"></path>
+                                </svg>                          
+                            </button>
+                        </h2>
+                        <div id="chartDisplay" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <canvas id="histogram" class="accordion-body"></canvas>
+                        </div>
+                    </div>
+                    <div id="blogContainerx"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -177,7 +180,7 @@
             };
 
             data.forEach(entry => {
-                ['Date', 'Cable Name', 'Type of incident', 'Causes', 'Countries', 'Companies'].forEach((key, index) => {
+                ['Date', 'Cable', 'Type', 'Cause', 'Country', 'Company'].forEach((key, index) => {
                     entry[key].split(', ').forEach(value => {
                         const trimmedValue = value.trim();
                         if (trimmedValue !== '') {
@@ -220,6 +223,15 @@
             resultsNumberElement.textContent = `Showing ${resultsCount} result(s)`;
         }
 
+        // Define a mapping object for column names to filter IDs
+        const columnToFilterIdMap = {
+            'Country': 'countryFilter',
+            'Cable': 'cableFilter',
+            'Type': 'typeFilter',
+            'Cause': 'causeFilter',
+            'Company': 'companyFilter'
+        };
+
         // Function to generate blog entries
         function generateBlogEntries(data, sortOrder) {
             clearContainer();
@@ -234,7 +246,11 @@
                 // Create a Bootstrap card for each entry
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.style.margin = '10px';
+                card.style.marginBottom = '10px';
+                card.style.padding = '15px';
+                card.style.border = '1px solid #000'; // Thin black border
+                card.style.borderRadius = '0.25rem'; // Rounded corners
+
 
                 const cardBody = document.createElement('div');
                 cardBody.className = 'card-body';
@@ -243,6 +259,26 @@
                 const cleanedDescriptionHtml = descriptionHtml.replace(/<\/?p>/g, '');
 
                 cardBody.innerHTML = `<p><b>${formattedDate}</b> - ${cleanedDescriptionHtml}</p>`;
+
+                // Create badges for each tag
+                const tags = ['Country', 'Cable', 'Type', 'Cause', 'Company'];
+                tags.forEach(tag => {
+                    const tagValues = entry[tag].split(', ');
+                    tagValues.forEach(value => {
+                        const badge = document.createElement('span');
+                        badge.className = 'badge bg-primary';
+                        badge.textContent = value.trim();
+                        badge.style.marginRight = '5px';
+                        badge.style.cursor = 'pointer';
+                        badge.addEventListener('click', function() {
+                            const filterId = `${tag.toLowerCase()}Filter`; // Construct the filter ID dynamically
+                            document.getElementById(filterId).value = value.trim();
+                            // Trigger the filter function to update the displayed entries
+                            filterBlogEntries();
+                        });
+                        cardBody.appendChild(badge);
+                    });
+                });
 
                 card.appendChild(cardBody);
                 document.getElementById('blogContainer').appendChild(card);
@@ -270,17 +306,116 @@
 
             // After resetting, update the results count
             updateResultsCount();
+            
+            // Update the display of active filters
+            updateActiveFiltersDisplay();
 
             // Generate blog entries with the original data, effectively removing any filters
-            generateBlogEntries(originalData);            
+            generateBlogEntries(originalData); 
         }
 
+        // Function to update the display of active filters
+        function updateActiveFiltersDisplay() {
+            const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
+            const activeFilters = filters.reduce((acc, filterId) => {
+                const filterValue = document.getElementById(filterId).value;
+                if (filterValue) {
+                    // Assuming each filter value is a single string, add it to the accumulator
+                    acc.push(filterValue);
+                }
+                return acc;
+            }, []);
+
+            const activeFiltersDiv = document.getElementById('activefilters');
+            activeFiltersDiv.innerHTML = ''; // Clear the current display
+
+            if (activeFilters.length > 0) {
+                // Concatenate active filters with " AND "
+                const activeFiltersText = activeFilters.join(' AND ');
+                activeFiltersDiv.textContent = `Active Filter(s): ${activeFiltersText}`;
+            } else {
+                activeFiltersDiv.textContent = 'Active Filter(s): No active filters.';
+            }
+        }
 
         // Variable to store the filtered data
         let filteredData = [];
 
+        function aggregateDataByYear(data) {
+            const yearCounts = {};
+            data.forEach(entry => {
+                const year = entry.Date.split('/')[1]; // Extract the year from the date string
+                if (yearCounts[year]) {
+                    yearCounts[year]++;
+                } else {
+                    yearCounts[year] = 1;
+                }
+            });
+            return yearCounts;
+        }
+
+        function createHistogramChart(yearCounts) {
+            const ctx = document.getElementById('histogram').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar', // Specify the chart type
+                data: {
+                    labels: Object.keys(yearCounts), // Use the years as labels
+                    datasets: [{
+                        data: Object.values(yearCounts), // Use the counts as data
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Customize the bar color
+                        borderWidth: 1, // Add a border to the bars
+                        barPercentage: 0.5, // Make the bars narrower
+                        categoryPercentage: 0.5 // Make the bars narrower
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }],
+                        yAxis: {
+                            title: {
+                                display: true,
+                                text: '# of results',
+                            },
+                            ticks: {
+                                callback: function(value, index ) {
+                                    return Number.isInteger(value) ? value : undefined; // This ensures that the ticks are displayed as whole numbers
+                                }
+                            }
+                        },
+                        xAxis: {
+                            title: {
+                                display: true,
+                                text: 'year',
+                            },
+                        }
+                    },
+    
+                    plugins: {
+                        legend: {
+                            display: true,
+                            text: '# of results'
+                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Results vs Year' // Set the chart title
+                    }
+                }
+            });
+
+            return chart; // Return the chart instance for potential updates
+        }
+
         // Function to filter blog entries
         function filterBlogEntries(searchQuery = '') {
+            
+            // ***Filtering logic***
+
             // Retrieve current filter values
             const year = document.getElementById('yearFilter').value;
             const cable = document.getElementById('cableFilter').value;
@@ -295,12 +430,28 @@
                 const searchMatch = searchQuery === '' || entry.Details.toLowerCase().includes(searchQuery.toLowerCase());
                 return searchMatch &&
                     (year === '' || entryYear === year) &&       
-                    (cable === '' || entry['Cable Name'].split(', ').includes(cable)) &&
-                    (type === '' || entry['Type of incident'].split(', ').includes(type)) &&
-                    (cause === '' || entry.Causes.split(', ').includes(cause)) &&
-                    (country === '' || entry.Countries.split(', ').includes(country)) &&
-                    (company === '' || entry.Companies.split(', ').includes(company));
+                    (cable === '' || entry.Cable.includes(cable)) &&
+                    (type === '' || entry.Type.includes(type)) &&
+                    (cause === '' || entry.Cause.includes(cause)) &&
+                    (country === '' || entry.Country.includes(country)) &&
+                    (company === '' || entry.Company.includes(company));
             });
+
+            // Construct the URL fragment representing the current search state
+            let urlFragment = '?';
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value) {
+                    urlFragment += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`;
+                }
+            });
+
+            // Append the search query to the URL fragment
+            urlFragment += `search=${encodeURIComponent(searchQuery)}`;
+
+            // Update the browser's address bar with the constructed URL fragment
+            history.pushState({}, '', urlFragment);
+
+            // ***Update the UI***
 
             // Sort the filtered entries by month and year
             filteredData.sort((a, b) => {
@@ -312,6 +463,15 @@
             // After filtering, update the results count
             updateResultsCount();
 
+            // After applying filters, update the display of active filters
+            updateActiveFiltersDisplay();
+
+            // After filtering, aggregate data by year
+            const yearCounts = aggregateDataByYear(filteredData);
+
+            // Create the histogram chart
+            createHistogramChart(yearCounts);
+
             // Retrieve the current sort order from the dropdown
             const sortOrder = document.getElementById('sortOrder').value;
 
@@ -320,37 +480,77 @@
             
             // Now, generate the blog entries with the sorted and filtered data
             generateBlogEntries(sortedData, sortOrder);
+
         }
 
-        // Event listeners for the search box and filter dropdowns:
-        document.addEventListener('DOMContentLoaded', function() {
-            // Setting the initial sort order when the page loads
-            fetchCSV().then(data => {
-                originalData = data; // Store original data
-                const defaultSortOrder = "newest"; // Set your default sort order here
-                generateBlogEntries(data, defaultSortOrder); // Pass the default sort order to generateBlogEntries
+        // Helper function to update the URL with the current search parameters
+        function updateURLWithSearchParameters(searchQuery, filters) {
+            let urlFragment = '?';
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value) {
+                    urlFragment += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`;
+                }
             });
+            urlFragment += `search=${encodeURIComponent(searchQuery)}`;
+            history.pushState({}, '', urlFragment);
+        }
 
+        // Function to initialize the page with search parameters from the URL
+        function initializePageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('search') || '';
+            const filters = {};
+
+            // Example: If the URL contains "?year=2022", set the year filter to 2022
+            // You'll need to implement the logic to extract and set filter values based on your application's structure
+
+            // Fetch data and apply initial filters and search
+            fetchCSV().then(data => {
+                originalData = data;
+                const defaultSortOrder = "newest";
+                //filterBlogEntries(searchQuery);
+                generateBlogEntries(data, defaultSortOrder);
+                updateActiveFiltersDisplay();
+                createHistogramChart(aggregateDataByYear(data));
+            });
+        }
+
+        // Event listeners for the search box and filter dropdowns
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePageFromURL();
+
+            // Event listener for the filter toggle button
+            document.getElementById('filterToggle').addEventListener('click', function() {
+                var filterPanel = document.getElementById('SearchFilters'); // Adjusted to match the original ID
+                filterPanel.classList.toggle('hidden');
+            });
+            
             // Event listener for the search box
             document.getElementById('searchBox').addEventListener('input', function() {
-                filterBlogEntries(this.value);
+                const searchQuery = this.value;
+                updateURLWithSearchParameters(searchQuery, {});
+                filterBlogEntries(searchQuery);
             });
 
             // Event listeners for the filter dropdowns
             const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
             filters.forEach(filterId => {
                 document.getElementById(filterId).addEventListener('change', function() {
-                    filterBlogEntries();
+                    const filtersObj = {}; // Collect filter values into an object
+                    filters.forEach(id => {
+                        filtersObj[id] = document.getElementById(id).value;
+                    });
+                    updateURLWithSearchParameters('', filtersObj);
+                    filterBlogEntries('', filtersObj);
                 });
             });
 
             // Event listener for the sort order dropdown
             document.getElementById('sortOrder').addEventListener('change', function() {
-                const sortOrder = this.value; // Get the current sort order from the dropdown
+                const sortOrder = this.value;
                 const sortedData = sortData(filteredData, sortOrder);
-                generateBlogEntries(sortedData, sortOrder); // Pass the sort order to generateBlogEntries
+                generateBlogEntries(sortedData, sortOrder);
             });
-
         });
         
     </script>
