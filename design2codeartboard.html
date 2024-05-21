@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cable Incidents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-sm text-gray-600 mb-4">Provided by the Australian Strategic Policy Institute</div>
+        <h1 class="text-4xl font-bold mb-6">Cable Incidents</h1>
+        <div class="text-lg mb-4">Search using keywords, or pre-defined parameters</div>
+        <div class="flex flex-wrap gap-4 mb-8">
+            <input type="text" placeholder="Company or keyword" class="border border-gray-300 rounded py-2 px-4 w-full sm:w-auto flex-1">
+            <input type="text" placeholder="Country" class="border border-gray-300 rounded py-2 px-4 w-full sm:w-auto flex-1">
+            <select class="border border-gray-300 rounded py-2 px-4 w-full sm:w-auto flex-1">
+                <option>Year</option>
+            </select>
+            <select class="border border-gray-300 rounded py-2 px-4 w-full sm:w-auto flex-1">
+                <option>Cable name</option>
+            </select>
+            <select class="border border-gray-300 rounded py-2 px-4 w-full sm:w-auto flex-1">
+                <option>Incident type</option>
+            </select>
+            <select class="border border-gray-300 rounded py-2 px-4 w-full sm:w-auto flex-1">
+                <option>Action</option>
+            </select>
+            <button class="bg-transparent text-blue-600 py-2 px-4">Clear</button>
+            <button class="bg-blue-600 text-white rounded py-2 px-4">Search</button>
+        </div>
+        <div class="flex justify-between items-center mb-4">
+            <div class="text-gray-600">3 results</div>
+            <select class="border border-gray-300 rounded py-2 px-4 text-gray-600">
+                <option>Most recent</option>
+            </select>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 mb-4">
+            <div class="flex items-center mb-4">
+                <img src="https://placehold.co/50x50" alt="China Mobile logo placeholder" class="mr-4">
+                <div>
+                    <div class="font-bold text-lg">China Mobile</div>
+                    <div class="text-gray-600 text-sm">Drama. SubCom got deal over HMN Tech. Chinese telcos walked (https://www.reuters.com/investigates/special-report/us-china-tech-cables/ - 3/23)</div>
+                </div>
+            </div>
+            <div class="text-gray-600 text-sm">January 2023</div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 mb-4">
+            <div class="flex items-center mb-4">
+                <img src="https://placehold.co/50x50" alt="Meta logo placeholder" class="mr-4">
+                <div>
+                    <div class="font-bold text-lg">Meta</div>
+                    <div class="text-gray-600 text-sm">Delayed because China stricter on permits for cables through [South China Sea] (https://www.datacenterdynamics.com/en/news/china-flexes-muscles-over-internet-subsea-cables-crossing-south-china-sea/ - 3/23) Concerns about Japan's NEC spying from [China]</div>
+                </div>
+            </div>
+            <div class="text-gray-600 text-sm">January 2023</div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center mb-4">
+                <img src="https://placehold.co/50x50" alt="Amazon logo placeholder" class="mr-4">
+                <div>
+                    <div class="font-bold text-lg">Amazon</div>
+                    <div class="text-gray-600 text-sm">(see also CAP-1) Originally Singapore to Hong Kong to California. China Mobile left, rebranded as CAP-1, which added leg from Cali to Philippines. Section to HK abandoned</div>
+                </div>
+            </div>
+            <div class="text-gray-600 text-sm">January 2021</div>
+        </div>
+    </div>
+</body>
+</html>
