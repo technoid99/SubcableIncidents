@@ -17,16 +17,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
     <style>
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
+        }
+        .hashtag {
+            display: inline-block;
+            padding:.25em.4em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            background-color: rgb(70, 71, 103);
+            border-radius:.25rem;
+        }
+
+        .badge:hover,
+        .badge:focus,
+        .badge.focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
         }
 
     </style>
-    <!-- Include Chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-</head>
+    </head>
 <body class="bg-gray-100">
     <div class="max-w-3xl mx-auto p-6">
-
+        <div class="text-sm text-gray-600 mb-4">Provided by the Australian Strategic Policy Institute</div>
+        <h1 class="text-4xl font-bold mb-6">Cable Incidents and Events</h1>
+        <div class="text-sm mb-4">This is a non-exhaustive list of global cable events and incidents of interference.</div>
         <!--search bar-->
         <div class="flex items-center bg-white rounded-lg shadow p-4 mb-6">
             <div class="flex-grow flex items-center">
@@ -239,12 +260,12 @@
             cardBody.innerHTML = `<p><b>${formattedDate}</b> - ${cleanedDescriptionHtml}</p>`;
 
             // Create badges for each tag
-            const tags = ['Country', 'Cable', 'Type', 'Cause', 'Company'];
+            const tags = ['Type', 'Cause'];
             tags.forEach(tag => {
                 const tagValues = entry[tag].split(', ');
                 tagValues.forEach(value => {
                     const badge = document.createElement('span');
-                    badge.className = 'badge bg-primary';
+                    badge.className = 'hashtag';
                     badge.textContent = value.trim();
                     badge.style.marginRight = '5px';
                     badge.style.cursor = 'pointer';
@@ -431,9 +452,8 @@
         fetchCSV().then(data => {
             originalData = data;
             const defaultSortOrder = "newest";
-            //filterBlogEntries(searchQuery);
+            filterBlogEntries(searchQuery);
             generateBlogEntries(data, defaultSortOrder);
-            updateActiveFiltersDisplay();
         });
     }
 
