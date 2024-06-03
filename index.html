@@ -1,7 +1,3 @@
-<!--ToDo:
-1) Tailwind https://tailwindcss.com/docs/installation
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,44 +8,19 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <!--include Tailwind CSS-->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="output.css"></link>
+    <link rel="stylesheet" href="styles.css"></link>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .hashtag {
-            display: inline-block;
-            padding:.25em.4em;
-            font-size: 75%;
-            font-weight: 700;
-            line-height: 1;
-            color: #fff;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            background-color: rgb(70, 71, 103);
-            border-radius:.25rem;
-        }
 
-        .badge:hover,
-        .badge:focus,
-        .badge.focus {
-            color: #fff;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-    </style>
-    </head>
+</head>
 <body class="bg-gray-100">
     <div class="max-w-3xl mx-auto p-6">
         <div class="text-sm text-gray-600 mb-4">Provided by the Australian Strategic Policy Institute</div>
         <h1 class="text-4xl font-bold mb-6">Cable Incidents and Events</h1>
         <div class="text-sm mb-4">This is a non-exhaustive list of global cable events and incidents of interference.</div>
         <!--search bar-->
-        <div class="flex items-center bg-white rounded-lg shadow p-4 mb-6">
+        <div class="flex items-center bg-white rounded-lg shadow p-4 mb-6 search-panel">
             <div class="flex-grow flex items-center">
                 <i class="fas fa-search text-gray-400 mr-3"></i>
                 <input type="search" id="searchBox" placeholder="Keyword search for cable incidents and events..." class="w-full text-sm text-gray-800 placeholder-gray-400 border-none p-2">
@@ -60,7 +31,7 @@
         </div>
 
         <!--filter panel-->
-        <div id="searchFilters" class="hidden bg-white rounded-lg shadow p-6 mb-6">
+        <div id="searchFilters" class="hidden bg-white rounded-lg shadow p-6 mb-6 search-panel">
             <p style="margin-bottom: 20px;">Advanced Filter</p>
             <div class="flex items-center mb-4">
                 <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Year</label>
@@ -101,8 +72,8 @@
 
             <!-- Buttons for clearing and applying filters -->
             <div class="flex justify-end mt-4">
-                <button type="button" class="text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white px-4 py-2 rounded transition duration-200 ease-in-out " onclick="filterBlogEntries()">Apply Filter</button>
-                <button type="button" class="text-gray-700 border border-gray-300 hover:bg-gray-200 hover:text-white px-4 py-2 rounded transition duration-200 ease-in-out ml-2" onclick="resetFilters()">Clear All</button>
+                <button type="button" class="text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white px-4 py-2 rounded transition duration-200 ease-in-out " id="ApplyBtn">Apply Filter</button>
+                <button type="button" class="text-gray-700 border border-gray-300 hover:bg-gray-200 hover:text-white px-4 py-2 rounded transition duration-200 ease-in-out ml-2" id="ClearBtn">Clear All</button>
             </div>
         </div>
 
@@ -113,8 +84,14 @@
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div id="resultsNumber" class="align-bottom" style="margin: 10px; margin-bottom:5px; color: rgb(126, 122, 122)"></div>
-                        <select id="sortOrder" class="form-select form-select-sm" style="margin: 10px; margin-bottom:5px; width: auto;">
+                        <span id="resultsNumber" class="align-bottom" style="margin-bottom:5px; color: rgb(126, 122, 122)"></span>
+                        <span id="shareResultsBadge" class="align-bottom badge-outline">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 128 128" class="icon">
+                                <path d="M 84 11 C 82.3 11 81 12.3 81 14 C 81 15.7 82.3 17 84 17 L 106.80078 17 L 60.400391 63.400391 C 59.200391 64.600391 59.200391 66.499609 60.400391 67.599609 C 61.000391 68.199609 61.8 68.5 62.5 68.5 C 63.2 68.5 63.999609 68.199609 64.599609 67.599609 L 111 21.199219 L 111 44 C 111 45.7 112.3 47 114 47 C 115.7 47 117 45.7 117 44 L 117 14 C 117 12.3 115.7 11 114 11 L 84 11 z M 24 31 C 16.8 31 11 36.8 11 44 L 11 104 C 11 111.2 16.8 117 24 117 L 84 117 C 91.2 117 97 111.2 97 104 L 97 59 C 97 57.3 95.7 56 94 56 C 92.3 56 91 57.3 91 59 L 91 104 C 91 107.9 87.9 111 84 111 L 24 111 C 20.1 111 17 107.9 17 104 L 17 44 C 17 40.1 20.1 37 24 37 L 69 37 C 70.7 37 72 35.7 72 34 C 72 32.3 70.7 31 69 31 L 24 31 z"></path>
+                            </svg>
+                            Share Results
+                        </span>
+                        <select id="sortOrderDD" class="form-select form-select-sm" style="margin: 10px; margin-bottom:5px; width: auto;">
                             <option value="newest">Newest First</option>
                             <option value="oldest">Oldest First</option>
                         </select>
@@ -125,117 +102,166 @@
         </div>
     </div>
     
- 
+ <script>
+let originalData;
 
-<script>
-    let originalData; // Variable to store the original data from CSV
+// Function to fetch and parse the CSV file
+async function fetchCSV() {
+    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv');
+    const csvText = await response.text();
+    const parsedData = Papa.parse(csvText, { header: true }).data;
+    originalData = parsedData; // Store original data
+    return parsedData;
+}
 
-    // Function to fetch and parse the CSV file
-    async function fetchCSV() {
-        const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv');
-        const csvText = await response.text();
-        const parsedData = Papa.parse(csvText, { header: true }).data;
-        originalData = parsedData; // Store original data
-        return parsedData;
-    }
+// Function to populate filter options
+function populateFilterOptions(data) {
+    // Initialize filter dropdowns with a default option
+    const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
+    filters.forEach(filterId => {
+        const filterElement = document.getElementById(filterId);
+        filterElement.innerHTML = `<option value="">${filterId.replace('Filter', '')}</option>`;
+    });
 
-    // Function to clear the container
-    function clearContainer() {
-        const container = document.getElementById('blogContainer');
-        container.innerHTML = '';
-    }
+    // Extract unique years for the yearFilter and sort them in descending order
+    const uniqueYears = new Set();
+    data.forEach(entry => {
+        const year = entry.Date.split('/')[1]; // Extract the year part from the date string
+        uniqueYears.add(year);
+    });
+    const sortedYears = Array.from(uniqueYears).sort((a, b) => b - a); // Sort in descending order
 
-    // Function to populate filter options
-    function populateFilterOptions(data) {
-        // Initialize filter dropdowns with a default option
-        const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
-        filters.forEach(filterId => {
-            const filterElement = document.getElementById(filterId);
-            filterElement.innerHTML = `<option value="">${filterId.replace('Filter', '')}</option>`;
-        });
+    // Populate the yearFilter dropdown with unique years
+    const yearFilterElement = document.getElementById('yearFilter');
+    sortedYears.forEach(year => {
+        yearFilterElement.innerHTML += `<option value="${year}">${year}</option>`;
+    });
 
-        // Extract unique years for the yearFilter and sort them in descending order
-        const uniqueYears = new Set();
-        data.forEach(entry => {
-            const year = entry.Date.split('/')[1]; // Extract the year part from the date string
-            uniqueYears.add(year);
-        });
-        const sortedYears = Array.from(uniqueYears).sort((a, b) => b - a); // Sort in descending order
-
-        // Populate the yearFilter dropdown with unique years
-        const yearFilterElement = document.getElementById('yearFilter');
-        sortedYears.forEach(year => {
-            yearFilterElement.innerHTML += `<option value="${year}">${year}</option>`;
-        });
-
-        // Extract unique values for each filter
-        const uniqueValues = {
-            year: new Set(),
-            cable: new Set(),
-            type: new Set(),
-            cause: new Set(),
-            country: new Set(),
-            company: new Set()
-        };
-
-        data.forEach(entry => {
-            ['Date', 'Cable', 'Type', 'Cause', 'Country', 'Company'].forEach((key, index) => {
-                entry[key].split(', ').forEach(value => {
-                    const trimmedValue = value.trim();
-                    if (trimmedValue !== '') {
-                        uniqueValues[filters[index].replace('Filter', '')].add(trimmedValue);
-                    }
-                });
-            });
-        });
-
-        // Convert Sets to arrays and sort them alphabetically
-        const sortedValues = {};
-        Object.keys(uniqueValues).forEach(key => {
-            sortedValues[key] = Array.from(uniqueValues[key]).sort();
-        });
-
-        // Populate dropdown options with sorted values, excluding the yearFilter
-        filters.filter(filterId => filterId !== 'yearFilter').forEach(filterId => {
-            const filterElement = document.getElementById(filterId);
-            const values = sortedValues[filterId.replace('Filter', '')];
-            values.forEach(value => {
-                filterElement.innerHTML += `<option value="${value}">${value}</option>`;
-            });
-        });
-    }
-
-    // Function to sort based on input. Created for resultsPanel
-    function sortData(data, order) {
-        return data.sort((a, b) => {
-            const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
-            const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
-            return order === 'newest' ? dateB - dateA : dateA - dateB; // Sort in descending or ascending order based on the order parameter
-        });
-    }
-
-    // Function to update the results count
-    function updateResultsCount() {
-        const resultsContainer = document.getElementById('blogContainer');
-        const resultsCount = resultsContainer.children.length;
-        const resultsNumberElement = document.getElementById('resultsNumber');
-        resultsNumberElement.textContent = `Showing ${resultsCount} result(s)`;
-    }
-
-    // Define a mapping object for column names to filter IDs
-    const columnToFilterIdMap = {
-        'Country': 'countryFilter',
-        'Cable': 'cableFilter',
-        'Type': 'typeFilter',
-        'Cause': 'causeFilter',
-        'Company': 'companyFilter'
+    // Extract unique values for each filter
+    const uniqueValues = {
+        year: new Set(),
+        cable: new Set(),
+        type: new Set(),
+        cause: new Set(),
+        country: new Set(),
+        company: new Set()
     };
 
-    // Function to generate blog entries
-    function generateBlogEntries(data, sortOrder) {
-        clearContainer();
-        populateFilterOptions(data);
-        const sortedData = sortData(data, sortOrder);
+    data.forEach(entry => {
+        ['Date', 'Cable', 'Type', 'Cause', 'Country', 'Company'].forEach((key, index) => {
+            entry[key].split(', ').forEach(value => {
+                const trimmedValue = value.trim();
+                if (trimmedValue !== '') {
+                    uniqueValues[filters[index].replace('Filter', '')].add(trimmedValue);
+                }
+            });
+        });
+    });
+
+    // Convert Sets to arrays and sort them alphabetically
+    const sortedValues = {};
+    Object.keys(uniqueValues).forEach(key => {
+        sortedValues[key] = Array.from(uniqueValues[key]).sort();
+    });
+
+    // Populate dropdown options with sorted values, excluding the yearFilter
+    filters.filter(filterId => filterId !== 'yearFilter').forEach(filterId => {
+        const filterElement = document.getElementById(filterId);
+        const values = sortedValues[filterId.replace('Filter', '')];
+        values.forEach(value => {
+            filterElement.innerHTML += `<option value="${value}">${value}</option>`;
+        });
+    });
+}
+
+function constructSearchUrl(activeSearchFilters) {
+    const { searchQuery = '', filters = {} } = activeSearchFilters;
+    let urlFragment = '?';
+
+    Object.entries(filters).forEach(([key, value]) => {
+        if (value) {
+            urlFragment += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`;
+        }
+    });
+
+    urlFragment += `search=${encodeURIComponent(searchQuery)}`;
+    return urlFragment;
+}
+
+function manageAppState() {
+    let activeSearchFilters = { searchQuery: '', filters: {} };
+    let activeSortOrder = "newest";
+
+    function updateSearchQuery(newSearchQuery) {
+        activeSearchFilters.searchQuery = newSearchQuery;
+        if (newSearchQuery.trim()!== '') {
+            const urlFragment = constructSearchUrl(activeSearchFilters);
+            history.pushState({}, '', urlFragment);
+        }
+    }
+
+    function updateFilters(newFilters) {
+        activeSearchFilters.filters = newFilters;
+        const urlFragment = constructSearchUrl(activeSearchFilters);
+        history.pushState({}, '', urlFragment);
+    }
+
+    function updateSortOrder(newSortOrder) {
+        activeSortOrder = newSortOrder;
+    }
+
+    function applyFiltersAndSort() {
+        generateFilteredBlogEntries();
+        updateActiveFiltersDisplay(activeSearchFilters);
+        updateURLWithSearchParameters(activeSearchFilters.searchQuery, activeSearchFilters.filters);
+    }
+
+    function getfilteredData(originalData, activeSearchFilters) {
+        // Initialize the filtered data array
+        let filteredData = [];
+
+        // Retrieve current filter values
+        const year = activeSearchFilters.filters.yearFilter;
+        const cable = activeSearchFilters.filters.cableFilter;
+        const type = activeSearchFilters.filters.typeFilter;
+        const cause = activeSearchFilters.filters.causeFilter;
+        const country = activeSearchFilters.filters.countryFilter;
+        const company = activeSearchFilters.filters.companyFilter;
+
+        // Filter the data based on the search query and other filters
+        filteredData = originalData.filter(entry => {
+            // Search query is only for Details column
+            const searchQueryMatch = !activeSearchFilters.searchQuery || entry.Details.toLowerCase().includes(activeSearchFilters.searchQuery.toLowerCase());
+            
+            const entryYear = entry.Date.split('/')[1]; // Extract the year from the entry's date
+
+            // Combine all matches
+            return searchQueryMatch && 
+                (!year || entryYear === year) &&
+                (!cable || entry.Cable.split(', ').includes(cable)) &&
+                (!type || entry.Type.split(', ').includes(type)) &&
+                (!cause || entry.Cause.split(', ').includes(action)) &&
+                (!country || entry.Country.split(', ').includes(country)) &&
+                (!company || entry.Company.split(', ').includes(company));
+
+        }); 
+
+        return filteredData;
+    }
+
+    // Function to filter blog entries - populates variable filteredData
+    function generateFilteredBlogEntries() {
+        clearContainer('blogContainer'); // Clear the blog container to remove existing entries
+        
+        // Use the getfilteredData function to get filteredData
+        const filteredData = getfilteredData(originalData, activeSearchFilters);
+
+        // After filtering, display the blog entries
+        displayBlogEntries(filteredData, activeSearchFilters, activeSortOrder)
+    }
+
+    function displayBlogEntries(data, sortOrder) {
+        const sortedData = sortData(data, activeSortOrder);
 
         sortedData.forEach(entry => {
             const [month, year] = entry.Date.split('/');
@@ -264,18 +290,27 @@
             tags.forEach(tag => {
                 const tagValues = entry[tag].split(', ');
                 tagValues.forEach(value => {
-                    const badge = document.createElement('span');
-                    badge.className = 'hashtag';
-                    badge.textContent = value.trim();
-                    badge.style.marginRight = '5px';
-                    badge.style.cursor = 'pointer';
-                    badge.addEventListener('click', function() {
-                        const filterId = `${tag.toLowerCase()}Filter`; // Construct the filter ID dynamically
-                        document.getElementById(filterId).value = value.trim();
-                        // Trigger the filter function to update the displayed entries
-                        filterBlogEntries();
-                    });
-                    cardBody.appendChild(badge);
+                    // Trim the value to remove any leading/trailing whitespace
+                    const trimmedValue = value.trim();
+
+                    // Check if the trimmed value is not empty before creating and appending the badge
+                    if (trimmedValue!== '') {
+                        const badge = document.createElement('span');
+                        badge.className = 'hashtag';
+                        badge.textContent = value.trim();
+                        badge.style.marginRight = '5px';
+                        badge.style.cursor = 'pointer';
+                        badge.addEventListener('click', function() {                    
+                            const filtersObj = {};
+                            const filterId = `${tag.toLowerCase()}Filter`; // Construct the filter ID dynamically
+                            filtersObj[filterId] = badge.textContent;
+                            updateFilters(filtersObj); // Update activeSearchFilters.filters.<tag>Filter
+                            updateSearchQuery(''); // Clear activeSearchFilters.searchQuery
+                            applyFiltersAndSort();
+                        });
+                    
+                        cardBody.appendChild(badge);
+                    }
                 });
             });
 
@@ -287,9 +322,13 @@
         updateResultsCount();
     }
 
-    // Function to reset filters
+    // Function to reset UI activeSearchFilters and SortOrder
     function resetFilters() {
-        document.getElementById('searchBox').value = '';
+
+        updateSearchQuery('');
+        document.getElementById('searchBox').value = ''; // Reset the search box value to be empty
+        
+        updateFilters({});
         document.getElementById('yearFilter').value = '';
         document.getElementById('cableFilter').value = '';
         document.getElementById('typeFilter').value = '';
@@ -297,134 +336,47 @@
         document.getElementById('countryFilter').value = '';
         document.getElementById('companyFilter').value = '';
 
-        originalData.sort((a, b) => {
-            const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
-            const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
-            return dateB - dateA; // Sort in descending order
-        });
+        updateSortOrder("newest");
 
-        // After resetting, update the results count
-        updateResultsCount();
-        
-        // Update the display of active filters
-        updateActiveFiltersDisplay();
+        applyFiltersAndSort();
 
-        // Generate blog entries with the original data, effectively removing any filters
-        generateBlogEntries(originalData); 
+        console.log("---all search filters cleared---");
     }
 
-    // Function to update the display of active filters
-    function updateActiveFiltersDisplay() {
-        const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
-        const activeFilters = filters.reduce((acc, filterId) => {
-            const filterValue = document.getElementById(filterId).value;
-            if (filterValue) {
-                // Assuming each filter value is a single string, add it to the accumulator
-                acc.push(filterValue);
-            }
-            return acc;
-        }, []);
+    async function initializePage() {
+        await fetchCSV(); // Wait for the data to load
+        populateFilterOptions(originalData);
+        const { searchQuery, filters } = readURLForSearchParameters();
+        activeSearchFilters = { searchQuery, filters };
+        applyFiltersAndSort();
 
-        const activeFiltersDiv = document.getElementById('activefilters');
-        activeFiltersDiv.innerHTML = ''; // Clear the current display
+    }
 
-        if (activeFilters.length > 0) {
-            // Concatenate active filters with " AND "
-            const activeFiltersText = activeFilters.join(' AND ');
-            activeFiltersDiv.textContent = `Active Filter(s): ${activeFiltersText}`;
-        } else {
-            activeFiltersDiv.textContent = 'Active Filter(s): No active filters.';
+    // Read URL for search parameters
+    function readURLForSearchParameters() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Extract the search query from the URL
+        const searchQuery = urlParams.get('search') || '';
+
+        // Prepare an empty object to hold the filter values
+        const filters = {};
+
+        // Iterate over each key-value pair in the URL parameters
+        for (const [key, value] of urlParams.entries()) {
+            // Skip the 'search' parameter since we've already handled it
+            if (key === 'search') continue;
+
+            // Decode the key and value to handle encoded characters
+            const decodedKey = decodeURIComponent(key);
+            const decodedValue = decodeURIComponent(value);
+
+            // Add the filter value to the filters object
+            filters[decodedKey] = decodedValue;
         }
-    }
 
-    // Variable to store the filtered data
-    let filteredData = [];
-
-    // Function to filter blog entries
-    function filterBlogEntries(searchQuery = '') {
-        // Retrieve current filter values
-        const year = document.getElementById('yearFilter').value;
-        const cable = document.getElementById('cableFilter').value;
-        const type = document.getElementById('typeFilter').value;
-        const cause = document.getElementById('causeFilter').value;
-        const country = document.getElementById('countryFilter').value;
-        const company = document.getElementById('companyFilter').value;
-
-        // Construct the URL fragment representing the current search state
-        let urlFragment = '?';
-        const filters = {
-            yearFilter: year,
-            cableFilter: cable,
-            typeFilter: type,
-            causeFilter: cause,
-            countryFilter: country,
-            companyFilter: company
-        };
-        Object.entries(filters).forEach(([key, value]) => {
-            if (value) {
-                urlFragment += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`;
-            }
-        });
-
-        // Append the search query to the URL fragment
-        urlFragment += `search=${encodeURIComponent(searchQuery)}`;
-
-        // Update the browser's address bar with the constructed URL fragment
-        history.pushState({}, '', urlFragment);
-
-        // Filter the entries based on the selected filters and search query
-        filteredData = originalData.filter(entry => {
-            const searchMatch = searchQuery === '' || entry.Details.toLowerCase().includes(searchQuery.toLowerCase());
-
-            // Check if the entry matches all filters
-            const matchesAllFilters = Object.values(filters).every(value => {
-                if (value === '') return true; // If no filter is applied, return true
-
-                // Check if the entry matches the filter
-                switch (value) {
-                    case 'year':
-                        return entry.Date.split('/')[1] === value;
-                    case 'cable':
-                        return entry.Cable.includes(value);
-                    case 'type':
-                        return entry.Type.includes(value);
-                    case 'cause':
-                        return entry.Cause.includes(value);
-                    case 'country':
-                        return entry.Country.includes(value);
-                    case 'company':
-                        return entry.Company.includes(value);
-                    default:
-                        return false;
-                }
-            });
-
-            return searchMatch && matchesAllFilters;
-        });
-
-        // ***Update the UI***
-
-        // Sort the filtered entries by month and year
-        filteredData.sort((a, b) => {
-            const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
-            const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
-            return dateB - dateA; // Sort in descending order
-        });
-
-        // After filtering, update the results count
-        updateResultsCount();
-
-        // After applying filters, update the display of active filters
-        updateActiveFiltersDisplay();
-
-        // Retrieve the current sort order from the dropdown
-        const sortOrder = document.getElementById('sortOrder').value;
-
-        // Sort the filtered entries based on the current sort order
-        const sortedData = sortData(filteredData, sortOrder);
-        
-        // Now, generate the blog entries with the sorted and filtered data
-        generateBlogEntries(sortedData, sortOrder);
+        // Return both the search query and the filters object
+        return { searchQuery, filters };
     }
 
     // Helper function to update the URL with the current search parameters
@@ -439,81 +391,258 @@
         history.pushState({}, '', urlFragment);
     }
 
-    // Function to initialize the page with search parameters from the URL
+    // Function to set up the page with search parameters from the URL
     function initializePageFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const searchQuery = urlParams.get('search') || '';
-        const filters = {};
+        const { searchQuery, filters } = readURLForSearchParameters();
+        activeSearchFilters = { searchQuery, filters };
 
-        // Example: If the URL contains "?year=2022", set the year filter to 2022
-        // You'll need to implement the logic to extract and set filter values based on your application's structure
+        // 1. Update the search box with the search query from the URL
+        document.getElementById('searchBox').value = activeSearchFilters.searchQuery;
 
-        // Fetch data and apply initial filters and search
-        fetchCSV().then(data => {
-            originalData = data;
-            const defaultSortOrder = "newest";
-            filterBlogEntries(searchQuery);
-            generateBlogEntries(data, defaultSortOrder);
-        });
-    }
+        // 2. Update the filter dropdowns with the values from the URL
+        Object.entries(filters).forEach(([key, value]) => {
+            const filterDropdownId = key;
+            const dropdown = document.getElementById(filterDropdownId);
 
-    // Event listeners for the search box and filter dropdowns
-    document.addEventListener('DOMContentLoaded', function() {
-        initializePageFromURL();
-
-        // Event listener for the filter toggle button
-        document.getElementById('filterToggle').addEventListener('click', function() {
-            var filterPanel = document.getElementById('searchFilters'); // Adjusted to match the original ID
-            filterPanel.classList.toggle('hidden');
-        });
-        
-        // Event listener for the search box
-        document.getElementById('searchBox').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                triggerSearch(this.value);
+            if (dropdown && value) {
+                const option = dropdown.querySelector(`option[value="${value}"]`);
+                if (option) {
+                    option.selected = true;
+                } else {
+                    console.warn(`No option found for value ${value} in dropdown ${dropdown.id}`);
+                }
+            } else {
+                console.warn(`No dropdown found for key ${key}`);
             }
         });
 
-        document.getElementById('searchBox').addEventListener('blur', function() {
-            triggerSearch(this.value);
+        // 3. Load the results based on the URL parameters
+        generateFilteredBlogEntries();
+    }
+
+    // Function to update the display of active filters - values only
+    function updateActiveFiltersDisplay(activeSearchFilters) {
+        const { searchQuery, filters } = activeSearchFilters;
+        
+        // Start with an empty array to accumulate active filter descriptions
+        let activeFiltersDescriptions = [];
+
+        // Add each filter's value to the array if it has a value
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value) {
+                // Format the filter description as "key: value"
+                // activeFiltersDescriptions.push(`${key}: ${value}`);
+                // Only push the value, not the key: value format
+                activeFiltersDescriptions.push(value);
+            }
         });
 
-        document.getElementById('searchBox').addEventListener('input', function() {
-            // Delay the check to allow the browser to process the "X" click
-            setTimeout(() => {
-                if (!this.value) {
-                    // If the input is cleared, treat it as a clear action
-                    triggerSearch('');
-                }
-            }, 100); // Adjust the delay as needed
-        });
-
-        function triggerSearch(searchQuery) {
-            updateURLWithSearchParameters(searchQuery, {});
-            filterBlogEntries(searchQuery);
+        // If there's a search query, add it to the beginning of the array
+        if (searchQuery!== '') {
+            activeFiltersDescriptions.unshift(searchQuery); // Directly use the search query without additional formatting
         }
 
-        // Event listeners for the filter dropdowns
+        const activeFiltersDiv = document.getElementById('activefilters');
+        activeFiltersDiv.innerHTML = ''; // Clear the current display
+
+        if (activeFiltersDescriptions.length > 0) {
+            // Join all filter values with ' AND ' to represent a boolean AND operation
+            const activeFiltersText = activeFiltersDescriptions.join(' AND ');
+            activeFiltersDiv.textContent = `Search results for: ${activeFiltersText}`;
+        } else {
+            activeFiltersDiv.textContent = 'No active filters.';
+        }
+    }
+
+    // Function to sort data asc/desc based on input. Created for the select id="sortOrder" dropdown in the ResultsPanel
+    function sortData(data, order) {
+        activeSortOrder = order; // Assign the passed order to activeSortOrder
+        return data.sort((a, b) => {
+            const dateA = new Date(a.Date.split('/')[1], a.Date.split('/')[0] - 1);
+            const dateB = new Date(b.Date.split('/')[1], b.Date.split('/')[0] - 1);
+            return order === 'newest'? dateB - dateA : dateA - dateB; // Sort in descending or ascending order based on the order parameter
+        });
+    }
+
+    return {
+        updateSearchQuery,
+        updateFilters,
+        updateSortOrder,
+        applyFiltersAndSort,
+        initializePage,
+        resetFilters, // Include resetFilters in the returned object
+        displayBlogEntries, // Include displayBlogEntries in the returned object
+        initializePageFromURL, // in the returned object
+        updateActiveFiltersDisplay,
+        sortData
+    };
+}
+
+// Usage
+const appState = manageAppState();
+
+function clearContainer(containerId) {
+    const container = document.getElementById(containerId);
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+}
+
+function attachEventListeners() {
+
+    // Event listener to the "Share Results" badge
+    document.getElementById('shareResultsBadge').addEventListener('click', shareResults);
+
+    // Event listener for the search box
+    document.getElementById('searchBox').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            // Update the search query in appState and trigger a search
+            appState.updateSearchQuery(this.value);
+            appState.applyFiltersAndSort();
+        }
+    });
+
+    document.getElementById('searchBox').addEventListener('blur', function() {
+        // Update the search query in appState and trigger a search when the search box loses focus
+        appState.updateSearchQuery(this.value);
+        appState.applyFiltersAndSort();
+    });
+
+    document.getElementById('searchBox').addEventListener('input', function() {
+        // On input, delay the call to allow the browser to process the "X" click
+        setTimeout(() => {
+            if (!this.value) {
+                // If the input is cleared, treat it as a clear action
+                appState.updateSearchQuery('');
+                appState.applyFiltersAndSort();
+            }
+        }, 100); // the delay
+    });
+
+    document.getElementById("sortOrderDD").addEventListener("change", function() {
+        appState.updateSortOrder(this.value);
+        appState.applyFiltersAndSort();
+    });
+
+    // Attach an event listener to the ClearBtn
+    document.getElementById('ClearBtn').addEventListener('click', function() {
+        appState.resetFilters();
+    });
+
+    // Event listener for the Apply button
+    document.getElementById("ApplyBtn").addEventListener("click", function() {
+        // 1. Get the current value of the search box
+        const searchQuery = document.getElementById('searchBox').value;
+
+        // 2. Get value of dropdown filters
+        // Collect filter values into an object
+        const filtersObj = {};
         const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
-        filters.forEach(filterId => {
-            document.getElementById(filterId).addEventListener('change', function() {
-                const filtersObj = {}; // Collect filter values into an object
-                filters.forEach(id => {
-                    filtersObj[id] = document.getElementById(id).value;
-                });
-                updateURLWithSearchParameters('', filtersObj);
-                filterBlogEntries('', filtersObj);
-            });
+        filters.forEach(id => {
+            const value = document.getElementById(id).value.trim(); // Trim to remove whitespace
+            if (value!== '' && value!== 'default') { // Check if the value is not empty and not the default placeholder
+                filtersObj[id] = value;
+            }
         });
 
-        // Event listener for the sort order dropdown
-        document.getElementById('sortOrder').addEventListener('change', function() {
-            const sortOrder = this.value;
-            const sortedData = sortData(filteredData, sortOrder);
-            generateBlogEntries(sortedData, sortOrder);
-        });
+        // Check if there are any meaningful filters to apply
+        if (Object.keys(filtersObj).length > 0) {
+            // Update the activeSearchFilters object and apply the filters
+            appState.updateSearchQuery(searchQuery); // Assuming you want to reset the search query or keep it as is
+            appState.updateFilters(filtersObj); // Update the filters in activeSearchFilters
+            appState.applyFiltersAndSort(); // Apply the filters and sorting
+        } else {
+            // Optionally, provide feedback to the user if no meaningful filters are selected
+            alert('Please select at least one filter to apply.');
+        }
     });
-    
+
+    console.log("Event listeners attached.");
+}
+
+
+async function initializeApp() {
+    try {
+        await appState.initializePage();
+        attachEventListeners();
+        initializePageFromURL(); // Call this function to initialize the page from URL parameters
+    } catch (error) {
+        console.error("Error initializing app:", error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await initializeApp();
+        console.log("DOM loaded; Application initialized successfully.");
+
+        // Adding the event listener for the filter toggle button
+        document.getElementById('filterToggle').addEventListener('click', function() {
+            var filterPanel = document.getElementById('searchFilters');
+            filterPanel.classList.toggle('hidden');
+        });
+
+    } catch (error) {
+        console.error("Error initializing app:", error);
+    }
+});
+
+
+// Function to show number of results
+function updateResultsCount() {
+    const resultsContainer = document.getElementById('blogContainer');
+    const resultsCount = resultsContainer.children.length;
+    const resultsNumberElement = document.getElementById('resultsNumber');
+    resultsNumberElement.textContent = `Showing ${resultsCount} result(s)`;
+}
+
+function shareResults() {
+    // Copy the current URL to the clipboard
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        const shareResultsBadge = document.getElementById('shareResultsBadge');
+        // Save the first child node (which should be the SVG) and the second child node (the text node)
+        const svgIconNode = shareResultsBadge.firstElementChild.cloneNode(true);
+
+        // Change the badge text to "Link Copied"
+        shareResultsBadge.innerHTML = ''; // Clear the current content
+        //shareResultsBadge.appendChild(svgIconNode); // Append the SVG icon back
+        const copiedTextNode = document.createTextNode('Link Copied');
+        shareResultsBadge.appendChild(copiedTextNode); // Append the new text node
+
+        // Revert the badge text back to "Share Results" after a short delay
+        setTimeout(function() {
+            shareResultsBadge.innerHTML = ''; // Clear the current content again
+            shareResultsBadge.appendChild(svgIconNode); // Append the SVG icon back
+            const originalTextNode = document.createTextNode('Share Results');
+            shareResultsBadge.appendChild(originalTextNode); // Append the original text node back
+        }, 2000); // Delay in milliseconds
+    })
+   .catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+
+// selectively expose only the functions that need to be called from outside of manageAppState()
+// created to simplify the onclick handler for the ApplyBtn by automatically capturing the current state of the search box and filters without explicitly passing arguments to generateFilteredBlogEntries()
+// maintains the encapsulation of your state management logic within manageAppState() while simplifying the onclick handler:
+window.initializePageFromURL = function() {
+    const appState = manageAppState();
+    appState.initializePageFromURL();
+};
+window.generateFilteredBlogEntries = function() {
+    const appState = manageAppState();
+    appState.applyFiltersAndSort(); // this function triggers generateFilteredBlogEntries internally
+};
+window.resetFilters = function() {
+    // Assuming resetFilters is defined within manageAppState and modifies appState accordingly
+    const appState = manageAppState();
+    appState.resetFilters();
+};
+
 </script>
+
+
+
 </body>
 </html>
