@@ -57,7 +57,7 @@
                 </select>
             </div>
             <div class="flex items-center mb-4">
-                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Country</label>
+                <label class="w-1/4 text-sm font-medium text-gray-700 hidden sm:block">Country/Location</label>
                 <select id="countryFilter" class="w-full sm:w-3/4 text-sm text-gray-800 bg-gray-50 rounded-lg border border-gray-300 p-2">
                     <option>Country</option>
                 </select>
@@ -76,20 +76,31 @@
             </div>
         </div>
 
-        <div class="row mb-6" id="activefilters"></div>
-
+        <div class="row mb-6" style="display: flex; align-items: center; justify-content: space-between;">
+            <div id="activefilters"></div>
+            <div style="justify-content: end;">
+                <span id="shareResultsBadge" class="align-bottom badge-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 128 128" class="icon">
+                        <path d="M 84 11 C 82.3 11 81 12.3 81 14 C 81 15.7 82.3 17 84 17 L 106.80078 17 L 60.400391 63.400391 C 59.200391 64.600391 59.200391 66.499609 60.400391 67.599609 C 61.000391 68.199609 61.8 68.5 62.5 68.5 C 63.2 68.5 63.999609 68.199609 64.599609 67.599609 L 111 21.199219 L 111 44 C 111 45.7 112.3 47 114 47 C 115.7 47 117 45.7 117 44 L 117 14 C 117 12.3 115.7 11 114 11 L 84 11 z M 24 31 C 16.8 31 11 36.8 11 44 L 11 104 C 11 111.2 16.8 117 24 117 L 84 117 C 91.2 117 97 111.2 97 104 L 97 59 C 97 57.3 95.7 56 94 56 C 92.3 56 91 57.3 91 59 L 91 104 C 91 107.9 87.9 111 84 111 L 24 111 C 20.1 111 17 107.9 17 104 L 17 44 C 17 40.1 20.1 37 24 37 L 69 37 C 70.7 37 72 35.7 72 34 C 72 32.3 70.7 31 69 31 L 24 31 z"></path>
+                    </svg>
+                    Share Results
+                </span>
+                <span id="downloadDataBadge" class="align-bottom badge-outline">
+                    <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.5535 16.5061C12.4114 16.6615 12.2106 16.75 12 16.75C11.7894 16.75 11.5886 16.6615 11.4465 16.5061L7.44648 12.1311C7.16698 11.8254 7.18822 11.351 7.49392 11.0715C7.79963 10.792 8.27402 10.8132 8.55352 11.1189L11.25 14.0682V3C11.25 2.58579 11.5858 2.25 12 2.25C12.4142 2.25 12.75 2.58579 12.75 3V14.0682L15.4465 11.1189C15.726 10.8132 16.2004 10.792 16.5061 11.0715C16.8118 11.351 16.833 11.8254 16.5535 12.1311L12.5535 16.5061Z" fill="#1C274C"/>
+                        <path d="M3.75 15C3.75 14.5858 3.41422 14.25 3 14.25C2.58579 14.25 2.25 14.5858 2.25 15V15.0549C2.24998 16.4225 2.24996 17.5248 2.36652 18.3918C2.48754 19.2919 2.74643 20.0497 3.34835 20.6516C3.95027 21.2536 4.70814 21.5125 5.60825 21.6335C6.47522 21.75 7.57754 21.75 8.94513 21.75H15.0549C16.4225 21.75 17.5248 21.75 18.3918 21.6335C19.2919 21.5125 20.0497 21.2536 20.6517 20.6516C21.2536 20.0497 21.5125 19.2919 21.6335 18.3918C21.75 17.5248 21.75 16.4225 21.75 15.0549V15C21.75 14.5858 21.4142 14.25 21 14.25C20.5858 14.25 20.25 14.5858 20.25 15C20.25 16.4354 20.2484 17.4365 20.1469 18.1919C20.0482 18.9257 19.8678 19.3142 19.591 19.591C19.3142 19.8678 18.9257 20.0482 18.1919 20.1469C17.4365 20.2484 16.4354 20.25 15 20.25H9C7.56459 20.25 6.56347 20.2484 5.80812 20.1469C5.07435 20.0482 4.68577 19.8678 4.40901 19.591C4.13225 19.3142 3.9518 18.9257 3.85315 18.1919C3.75159 17.4365 3.75 16.4354 3.75 15Z" fill="#1C274C"/>
+                    </svg>
+                    Download Data
+                </span>
+            </div>
+        </div>
 
         <div class="bg-white rounded-lg shadow p-6" id="resultsPanel">
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span id="resultsNumber" class="align-bottom" style="margin-bottom:5px; color: rgb(126, 122, 122)"></span>
-                        <span id="shareResultsBadge" class="align-bottom badge-outline">
-                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 128 128" class="icon">
-                                <path d="M 84 11 C 82.3 11 81 12.3 81 14 C 81 15.7 82.3 17 84 17 L 106.80078 17 L 60.400391 63.400391 C 59.200391 64.600391 59.200391 66.499609 60.400391 67.599609 C 61.000391 68.199609 61.8 68.5 62.5 68.5 C 63.2 68.5 63.999609 68.199609 64.599609 67.599609 L 111 21.199219 L 111 44 C 111 45.7 112.3 47 114 47 C 115.7 47 117 45.7 117 44 L 117 14 C 117 12.3 115.7 11 114 11 L 84 11 z M 24 31 C 16.8 31 11 36.8 11 44 L 11 104 C 11 111.2 16.8 117 24 117 L 84 117 C 91.2 117 97 111.2 97 104 L 97 59 C 97 57.3 95.7 56 94 56 C 92.3 56 91 57.3 91 59 L 91 104 C 91 107.9 87.9 111 84 111 L 24 111 C 20.1 111 17 107.9 17 104 L 17 44 C 17 40.1 20.1 37 24 37 L 69 37 C 70.7 37 72 35.7 72 34 C 72 32.3 70.7 31 69 31 L 24 31 z"></path>
-                            </svg>
-                            Share Results
-                        </span>
+                        
                         <select id="sortOrderDD" class="form-select form-select-sm" style="margin: 10px; margin-bottom:5px; width: auto;">
                             <option value="newest">Newest First</option>
                             <option value="oldest">Oldest First</option>
@@ -103,6 +114,7 @@
     
  <script>
 let originalData;
+let filteredData = [];
 
 // Function to fetch and parse the CSV file
 async function fetchCSV() {
@@ -217,7 +229,8 @@ function manageAppState() {
 
     function getfilteredData(originalData, activeSearchFilters) {
         // Initialize the filtered data array
-        let filteredData = [];
+        //let filteredData = [];
+        //commented out because it's now a global var
 
         // Retrieve current filter values
         const year = activeSearchFilters.filters.yearFilter;
@@ -239,7 +252,7 @@ function manageAppState() {
                 (!year || entryYear === year) &&
                 (!cable || entry.Cable.split(', ').includes(cable)) &&
                 (!type || entry.Type.split(', ').includes(type)) &&
-                (!cause || entry.Cause.split(', ').includes(action)) &&
+                (!cause || entry.Cause.split(', ').includes(cause)) &&
                 (!country || entry.Country.split(', ').includes(country)) &&
                 (!company || entry.Company.split(', ').includes(company));
 
@@ -489,6 +502,10 @@ function clearContainer(containerId) {
 
 function attachEventListeners() {
 
+    document.getElementById('downloadDataBadge').addEventListener('click', function() {
+        downloadCsv(filteredData);
+    });
+
     // Event listener to the "Share Results" badge
     document.getElementById('shareResultsBadge').addEventListener('click', shareResults);
 
@@ -621,6 +638,28 @@ function shareResults() {
     });
 }
 
+function downloadCsv(data, filename='subcables_events.csv') {
+    // Ensure headers are included in the CSV
+    const headers = Object.keys(data[0]);
+    const csvContent = [
+        headers.join(','), // Headers row
+       ...data.map(row => headers.map(header => `"${row[header]}"`).join(',')) // Data rows
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary anchor element and simulate a click to start the download
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup
+    document.body.removeChild(link);
+}
 
 // selectively expose only the functions that need to be called from outside of manageAppState()
 // created to simplify the onclick handler for the ApplyBtn by automatically capturing the current state of the search box and filters without explicitly passing arguments to generateFilteredBlogEntries()
@@ -638,7 +677,11 @@ window.resetFilters = function() {
     const appState = manageAppState();
     appState.resetFilters();
 };
-
+window.getfilteredData = function() {
+    // Assuming resetFilters is defined within manageAppState and modifies appState accordingly
+    const appState = manageAppState();
+    appState.getfilteredData();
+};
 </script>
 
 
