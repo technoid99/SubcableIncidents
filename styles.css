@@ -1,11 +1,5 @@
 /* styles.css */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* styles.css */
-
 /* ! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com */
 
 /*
@@ -247,6 +241,7 @@ input:where([type='button']),
 input:where([type='reset']),
 input:where([type='submit']) {
   -webkit-appearance: button;
+  appearance: button;
   /* 1 */
   background-color: transparent;
   /* 2 */
@@ -294,6 +289,7 @@ Correct the cursor style of increment and decrement buttons in Safari.
 
 [type='search'] {
   -webkit-appearance: textfield;
+  appearance: textfield;
   /* 1 */
   outline-offset: -2px;
   /* 2 */
@@ -879,6 +875,11 @@ video {
 
 .text-4xl {
   font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.text-2xl {
+  font-size: 1.75rem;
   line-height: 2.5rem;
 }
 
