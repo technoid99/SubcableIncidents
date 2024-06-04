@@ -1,3 +1,19 @@
+<!--TODO
+
+Implement this with a trusted CDN
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;">
+
+Make sure includes are up to date
+
+See if this is a problem: - Event Listener Removal:
+When dynamically adding elements that have event listeners (e.g., badges in displayBlogEntries), ensure corresponding removal logic is implemented to avoid memory leaks, especially if elements are frequently added and removed.
+
+can you do better error handling for fetchCSV without making loading slower?
+
+
+-->
+    
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +28,8 @@
     <link rel="stylesheet" href="styles.css"></link>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
-
+    <!--include DOMPurify-->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2/dist/purify.min.js"></script>
 </head>
 <body class="bg-gray-100">
     <div class="max-w-3xl mx-auto p-6">
@@ -117,11 +134,12 @@
     </div>
     
  <script>
-let originalData;
-let filteredData = [];
+let originalData; //read in once only from original CSV
+let filteredData = []; //created global only so can share the results as CSV through Download Data button
 
 // Function to fetch and parse the CSV file
 async function fetchCSV() {
+    
     const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv');
     const csvText = await response.text();
     const parsedData = Papa.parse(csvText, { header: true }).data;
@@ -135,7 +153,8 @@ function populateFilterOptions(data) {
     const filters = ['yearFilter', 'cableFilter', 'typeFilter', 'causeFilter', 'countryFilter', 'companyFilter'];
     filters.forEach(filterId => {
         const filterElement = document.getElementById(filterId);
-        filterElement.innerHTML = `<option value="">${filterId.replace('Filter', '')}</option>`;
+        const sanitizedOption = DOMPurify.sanitize(`<option value="">${filterId.replace('Filter', '')}</option>`); // Sanitize the option string
+        filterElement.innerHTML = sanitizedOption;
     });
 
     // Extract unique years for the yearFilter and sort them in descending order
@@ -208,7 +227,7 @@ function manageAppState() {
     let activeSortOrder = "newest";
 
     function updateSearchQuery(newSearchQuery) {
-        activeSearchFilters.searchQuery = newSearchQuery;
+        activeSearchFilters.searchQuery = DOMPurify.sanitize(newSearchQuery);
         if (newSearchQuery.trim()!== '') {
             const urlFragment = constructSearchUrl(activeSearchFilters);
             history.pushState({}, '', urlFragment);
@@ -292,25 +311,28 @@ function manageAppState() {
             card.style.border = '1px solid #000'; // Thin black border
             card.style.borderRadius = '0.25rem'; // Rounded corners
 
-
             const cardBody = document.createElement('div');
             cardBody.className = 'card-body';
 
             const descriptionHtml = marked.parse(entry.Details);
             const cleanedDescriptionHtml = descriptionHtml.replace(/<\/?p>/g, '');
+            // Sanitize the description
+            const sanitizedDescriptionHtml = DOMPurify.sanitize(cleanedDescriptionHtml);
 
-            cardBody.innerHTML = `<p><b>${formattedDate}</b> - ${cleanedDescriptionHtml}</p>`;
+            // Sanitize the entire card body HTML string before insertion
+            const sanitizedCardBodyHtml = DOMPurify.sanitize(`<p><b>${formattedDate}</b> - ${sanitizedDescriptionHtml}</p>`);
+            cardBody.innerHTML = sanitizedCardBodyHtml;
 
-            // Create badges for each tag
+            // Create sanitised badges for each tag
             const tags = ['Type', 'Cause'];
             tags.forEach(tag => {
                 const tagValues = entry[tag].split(', ');
                 tagValues.forEach(value => {
                     // Trim the value to remove any leading/trailing whitespace
-                    const trimmedValue = value.trim();
-
-                    // Check if the trimmed value is not empty before creating and appending the badge
-                    if (trimmedValue!== '') {
+                    const sanitizedValue = DOMPurify.sanitize(value.trim()); // Sanitize the value
+                    
+                    // Check if the (sanitised) trimmed value is not empty before creating and appending the badge
+                    if (sanitizedValue!== '') {
                         const badge = document.createElement('span');
                         badge.className = 'hashtag';
                         badge.textContent = value.trim();
@@ -356,7 +378,7 @@ function manageAppState() {
 
         applyFiltersAndSort();
 
-        console.log("---all search filters cleared---");
+        //console.log("---all search filters cleared---");
     }
 
     async function initializePage() {
@@ -582,7 +604,7 @@ function attachEventListeners() {
         }
     });
 
-    console.log("Event listeners attached.");
+    //console.log("Event listeners attached.");
 }
 
 
@@ -599,7 +621,7 @@ async function initializeApp() {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         await initializeApp();
-        console.log("DOM loaded; Application initialized successfully.");
+        //console.log("DOM loaded; Application initialized successfully.");
 
         // Adding the event listener for the filter toggle button
         document.getElementById('filterToggle').addEventListener('click', function() {
