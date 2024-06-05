@@ -4,7 +4,8 @@ let filteredData = []; //created global only so can share the results as CSV thr
 // Function to fetch and parse the CSV file
 async function fetchCSV() {
     
-    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv');
+    //const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv');
+    const response = await fetch('cable_incidents.csv');
     const csvText = await response.text();
     const parsedData = Papa.parse(csvText, { header: true }).data;
     originalData = parsedData; // Store original data
