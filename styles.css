@@ -733,6 +733,10 @@ video {
   display: flex;
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
 .table {
   display: table;
 }
@@ -791,6 +795,10 @@ video {
 
 .justify-end {
   justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
 }
 
 .gap-1 {
@@ -1089,4 +1097,8 @@ body {
   padding: 15px;
   border: 1px solid #000; /* Thin black border */
   border-radius: 0.25rem; /* Rounded corners */
+}
+
+.a-link { /*unused. used .hidden instead*/
+  visibility: hidden;
 }
