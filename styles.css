@@ -921,6 +921,11 @@ video {
   color: rgb(31 41 55 / var(--tw-text-opacity));
 }
 
+.text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(126 122 122 / var(--tw-text-opacity));
+}
+
 .underline {
   text-decoration-line: underline;
 }
@@ -990,6 +995,8 @@ body {
   vertical-align: baseline;
   background-color: rgb(70, 71, 103);
   border-radius:.25rem;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
 .hashtag:hover,
@@ -1069,4 +1076,17 @@ body {
   .sm\:w-3\/4 {
     width: 75%;
   }
+}
+
+.flex-ctr-sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card {
+  margin-bottom: 10px;
+  padding: 15px;
+  border: 1px solid #000; /* Thin black border */
+  border-radius: 0.25rem; /* Rounded corners */
 }
