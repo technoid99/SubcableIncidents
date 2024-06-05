@@ -773,8 +773,20 @@ video {
   flex-shrink: 0;
 }
 
-.flex-grow {
+.flex-grow-1 {
   flex-grow: 1;
+}
+
+.flex-grow-2 {
+  flex-grow: 2;
+}
+
+.flex-grow-3 {
+  flex-grow: 3;
+}
+
+.flex-grow-4 {
+  flex-grow: 4;
 }
 
 .transform {
@@ -791,6 +803,10 @@ video {
 
 .items-center {
   align-items: center;
+}
+
+.items-stretch {
+  align-items: stretch;
 }
 
 .justify-end {
@@ -865,6 +881,11 @@ video {
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .py-2 {
@@ -1084,6 +1105,7 @@ body {
   .sm\:w-3\/4 {
     width: 75%;
   }
+
 }
 
 .flex-ctr-sb {
@@ -1099,6 +1121,6 @@ body {
   border-radius: 0.25rem; /* Rounded corners */
 }
 
-.a-link { /*unused. used .hidden instead*/
+.vis-hidden {
   visibility: hidden;
 }
