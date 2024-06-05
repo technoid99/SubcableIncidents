@@ -1,7 +1,7 @@
 <!--TODO
 
 Implement:
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://doc-0s-3g-sheets.googleusercontent.com https://docs.google.com https://api.example.com; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://github.io; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:;">    <script src="main.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://doc-0s-3g-sheets.googleusercontent.com https://docs.google.com https://api.example.com; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://github.io; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:;">    
 
 See if this is a problem: - Event Listener Removal:
 When dynamically adding elements that have event listeners (e.g., badges in displayBlogEntries), ensure corresponding removal logic is implemented to avoid memory leaks, especially if elements are frequently added and removed.
@@ -19,7 +19,7 @@ can you do better error handling for fetchCSV without making loading slower?
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submarine Communication Cables: Incidents and Events</title>
     <meta name="description" content="Explore undersea submarine communication cable incidents and events worldwide.">
-    <!--change this depending on host-->
+    <script src="main.js"></script>
     <!--include Papaparse-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <!--include Tailwind CSS-->
