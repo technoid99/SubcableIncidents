@@ -6,9 +6,6 @@ Implement:
 See if this is a problem: - Event Listener Removal:
 When dynamically adding elements that have event listeners (e.g., badges in displayBlogEntries), ensure corresponding removal logic is implemented to avoid memory leaks, especially if elements are frequently added and removed.
 
-can you do better error handling for fetchCSV without making loading slower?
-
-
 -->
     
 
@@ -19,7 +16,6 @@ can you do better error handling for fetchCSV without making loading slower?
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submarine Communication Cables: Incidents and Events</title>
     <meta name="description" content="Explore undersea submarine communication cable incidents and events worldwide.">
-    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'">
     <script src="main.js"></script>
     <!-- Include marked for Markdown and Papaparse for CSV parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -35,20 +31,42 @@ can you do better error handling for fetchCSV without making loading slower?
     <div class="max-w-3xl mx-auto p-6">
         <div class="text-sm text-gray-600 mb-4">Submarine communication cables</div>
         <h1 class="text-4xl font-bold mb-6">Cable Incidents and Events</h1>
-        <div class="text-sm mb-4">This is a non-exhaustive list of global cable events and incidents of interference.</div>
-        <!--search bar-->
-        <div class="flex items-center bg-white rounded-lg shadow p-4 mb-6 search-panel">
-            <div class="flex-grow flex items-center">
-                <i class="fas fa-search text-gray-400 mr-3"></i>
-                <input type="search" id="searchBox" placeholder="Keyword search for cable incidents and events..." class="w-full text-sm text-gray-800 placeholder-gray-400 border-none p-2">
+        <div class="text-sm mb-4">This is a list of global cable developments and incidents. 
+            It includes disruptions, reports of interference and major developments. 
+            It is a non-exhaustive list and it should be noted that the industry 
+            often doesn’t report disruptions so what is captured here is from 
+            public sources only.</div>
+
+        <div class="text-sm mb-4">Filter through the items using the search box, 
+            dropdowns or by clicking the tags under each event.</div>
+
+        <div class="flex-ctr-sb mb-6">
+            <!-- Search Input -->
+            <div class="flex items-center flex-grow bg-white rounded-lg shadow p-4 search-panel w-1/2">
+                <div class="flex-grow flex items-center">
+                    <i class="fas fa-search text-gray-400 mr-3"></i>
+                    <input type="search" id="searchBox" placeholder="Keyword search for cable incidents and events..." class="w-full text-sm text-gray-800 placeholder-gray-400 border-none p-2">
+                </div>
             </div>
-            <button id="clearmeBtn" class="ml-4 text-grey-500">
-                <i class="fas fa-backspace"></i>
-            </button>
-            <button id="filterToggle" class="ml-4 text-blue-500">
-                <i class="fas fa-filter"></i>
-            </button>
+        
+            <!-- Clear & MoreFilters Buttons -->
+            <div class="flex flex-col ml-4">
+                <div>
+                    <button id="clearmeBtn" class="text-grey-500">
+                        <i class="fas fa-backspace"></i>
+                        Clear
+                    </button>
+                </div>
+                <div>
+                    <button id="filterToggle" class="text-blue-500">
+                        <i class="fas fa-filter"></i>
+                        More filters
+                    </button>
+                </div>
+            </div>
+
         </div>
+
 
         <!--filter panel-->
         <div id="searchFilters" class="hidden bg-white rounded-lg shadow p-6 mb-6 search-panel">
