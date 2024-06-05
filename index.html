@@ -1,10 +1,5 @@
 <!--TODO
 
-Implement this with a trusted CDN
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;">
-
-Make sure includes are up to date
-
 See if this is a problem: - Event Listener Removal:
 When dynamically adding elements that have event listeners (e.g., badges in displayBlogEntries), ensure corresponding removal logic is implemented to avoid memory leaks, especially if elements are frequently added and removed.
 
@@ -21,6 +16,7 @@ can you do better error handling for fetchCSV without making loading slower?
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submarine Communication Cables: Incidents and Events</title>
     <meta name="description" content="Explore undersea submarine communication cable incidents and events worldwide.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;">
     <!-- Include marked for Markdown and Papaparse for CSV parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
