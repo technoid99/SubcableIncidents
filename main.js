@@ -169,7 +169,7 @@ function manageAppState() {
 
             // Create a Bootstrap card for each entry
             const card = document.createElement('div');
-            //card.className = 'card';
+            card.className = 'card';
             //card.style.marginBottom = '10px';
             //card.style.padding = '15px';
             //card.style.border = '1px solid #000'; // Thin black border
