@@ -1,13 +1,17 @@
 # About
 
-This webpage lists an non-exhaustive list of submarine cable events and incidents. Its focus is historic events and incidents with possible geopolitical implications. But it also contains incidents that show the breadth of causes of submarine cable damage.
+This webpage lists an non-exhaustive list of submarine cable developments, disruptions and reports of interference. Its focus is historic events and incidents with possible geopolitical implications. But it also contains incidents that show the breadth of causes of submarine cable damage.
 
 The webpage is accessible [here](https://technoid99.github.io/SubcableIncidents/)
 
 The main features of this webpage are that that the user can filter through the items via the free text search box and/or the dropdown filters. The results can then be downloaded into a CSV. The results can also be shared via the unique URL for that search result.
 
 # Design
-index.html is single HTML document that includes a <script> tag containing JavaScript code. This JavaScript code is responsible for fetching data from a Google Sheets document, populating filter dropdowns based on the fetched data, managing the application state (including search query and filters), sorting the displayed data, and providing functionalities for sharing and downloading the filtered data. Additionally, there is a separate styles.css file that handles the styling of the graphical user interface (GUI) elements.
+index.html defines the webpage design
+main.js contains all the JavaScript code
+styles.css contains all the styles for the GUI
+
+The JavaScript code in main.js is responsible for fetching data from a Google Sheets document, populating filter dropdowns based on the fetched data, managing the application state (including search query and filters), sorting the displayed data, and providing functionalities for sharing and downloading the filtered data. Additionally, there is a separate styles.css file that handles the styling of the graphical user interface (GUI) elements.
 
 Here's a breakdown of its core functionalities:
 
