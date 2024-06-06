@@ -798,7 +798,7 @@ video {
 }
 
 .flex-wrap {
-  flex-wrap: wrap;
+  flex-wrapb: wrap;
 }
 
 .items-center {
@@ -851,9 +851,19 @@ video {
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
+.border-gray-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
+}
+
 .bg-gray-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+
+.bg-gray-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .bg-gray-50 {
@@ -876,6 +886,10 @@ video {
 
 .p-6 {
   padding: 1.5rem;
+}
+
+.pt-48 {
+  padding-top: 200px;
 }
 
 .px-4 {
@@ -1087,9 +1101,14 @@ body {
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-gray-500 {
+--tw-bg-opacity: 1;
+background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-gray-200:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .hover\:text-white:hover {
@@ -1123,4 +1142,27 @@ body {
 
 .vis-hidden {
   visibility: hidden;
+}
+
+.banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 400px; /* Fixed height */
+  background-image: url('banner.png');
+  background-size: cover;
+  background-position: center;
+  z-index: -1; /* Ensure it sits behind other content */
+}
+
+.banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.75); /* Semi-transparent white overlay */
+  pointer-events: none; /* Ensures clicks pass through */
 }
