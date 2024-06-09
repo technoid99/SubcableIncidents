@@ -765,6 +765,10 @@ video {
   max-width: 48rem;
 }
 
+.max-w-4xl {
+  max-width: 64rem;
+}
+
 .flex-shrink {
   flex-shrink: 1;
 }
@@ -798,7 +802,7 @@ video {
 }
 
 .flex-wrap {
-  flex-wrapb: wrap;
+  flex-wrap: wrap;
 }
 
 .items-center {
@@ -1125,6 +1129,10 @@ background-color: rgb(229 231 235 / var(--tw-bg-opacity));
     width: 75%;
   }
 
+  .sm\:inline {
+    display: inline; /* or block, inline-block, etc., depending on your layout */
+  }
+
 }
 
 .flex-ctr-sb {
@@ -1166,3 +1174,55 @@ background-color: rgb(229 231 235 / var(--tw-bg-opacity));
   background-color: rgba(255, 255, 255, 0.75); /* Semi-transparent white overlay */
   pointer-events: none; /* Ensures clicks pass through */
 }
+
+.card-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Creates two equal columns */
+  grid-template-rows: auto auto auto; /* Adjust based on content */
+  grid-template-areas: 
+    "monthDate monthDate"
+    "info1 info2"
+    "dateDescription dateDescription";
+  gap: 8px; /* Adjust the gap between grid items as needed */
+}
+
+.monthDate {
+  grid-area: monthDate;
+  display: flex;
+  justify-content: flex-end; /* Aligns content to the right */
+}
+
+.info-row {
+  display: contents; /* Makes the direct children of.info-row participate in the grid layout */
+}
+
+.info-label {
+  font-weight: bold; /* Optional: Makes the labels bold */
+  justify-content: flex-start;
+
+}
+
+/* Target the first two.info-item elements to place them in the first row */
+.info-item:nth-child(1) {
+  grid-area: info1;
+}
+
+.info-item:nth-child(2) {
+  grid-area: info2;
+}
+
+/* Target the element that should span the entire width in the second row */
+.dateDescription {
+  grid-area: dateDescription;
+  grid-column: 1 / -1; /* This makes the dateDescription span both columns */
+}
+
+
+
+/* Adjust the layout for larger screens */
+@media (min-width: 768px) {
+ .card-content {
+      grid-template-columns: repeat(2, 1fr); /* Keeps the two-column layout on larger screens */
+  }
+}
+
