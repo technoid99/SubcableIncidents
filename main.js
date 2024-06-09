@@ -3,12 +3,39 @@ let filteredData = []; //created global only so can share the results as CSV thr
 
 // Function to fetch and parse the CSV file
 async function fetchCSV() {
-    
-    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv');
-    const csvText = await response.text();
-    const parsedData = Papa.parse(csvText, { header: true }).data;
-    originalData = parsedData; // Store original data
-    return parsedData;
+    try {
+        const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwM2mfSIQK_-lAYzBvFQ-EX0Jq3XfwHETZkpY8I4pahueBF28Z4j6m_d1k2_Z3tcXdw2VhpvenZNbO/pub?gid=0&single=true&output=csv');
+
+        // Check if the fetch was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error status: ${response.status}`);
+        }
+
+        const csvText = await response.text();
+
+        // Attempt to parse the CSV data
+        const parsedData = Papa.parse(csvText, {
+            header: true,
+            complete: function(results) {
+                // On successful parsing, store and return the parsed data
+                originalData = results.data; // Store original data globally
+                return results.data;
+            },
+            error: function(err) {
+                // Handle parsing errors
+                throw new Error(`Parsing error: ${err.message}`);
+            }
+        });
+
+        return parsedData;
+    } catch (error) {
+        // Catch network errors or parsing errors
+        console.error("Error fetching or parsing CSV:", error);
+        // Update the UI to inform the user about the error using the 'activefilters' space.
+        const errorMessageElement = document.getElementById('activefilters');
+        errorMessageElement.textContent = "Error fetching or parsing CSV."
+        return []; // Return an empty array in case of failure
+    }
 }
 
 // Function to populate filter options
@@ -170,10 +197,6 @@ function manageAppState() {
             // Create a Bootstrap card for each entry
             const card = document.createElement('div');
             card.className = 'card';
-            //card.style.marginBottom = '10px';
-            //card.style.padding = '15px';
-            //card.style.border = '1px solid #000'; // Thin black border
-            //card.style.borderRadius = '0.25rem'; // Rounded corners
 
             const cardBody = document.createElement('div');
             cardBody.className = 'card-body';
@@ -184,7 +207,16 @@ function manageAppState() {
             const sanitizedDescriptionHtml = DOMPurify.sanitize(cleanedDescriptionHtml);
 
             // Sanitize the entire card body HTML string before insertion
-            const sanitizedCardBodyHtml = DOMPurify.sanitize(`<p><b>${formattedDate}</b> - ${sanitizedDescriptionHtml}</p>`);
+            const sanitizedCardBodyHtml = DOMPurify.sanitize(`
+                <div class="card-content">
+                    <div class="monthDate"><b>${formattedDate}</b></div>
+                    <div class="info-row">
+                        <div class="info-item"><span class="info-label">Cable(s): </span> <span class="info-value">${entry.Cable}</div>
+                        <div class="info-item"><span class="info-label">Location(s): </span> <span class="info-value">${entry.Country}</div>
+                    </div>
+                    <div class="dateDescription"><p>${sanitizedDescriptionHtml}</p></div>
+                </div>
+            `);
             cardBody.innerHTML = sanitizedCardBodyHtml;
 
             // Create sanitised badges for each tag
