@@ -208,7 +208,16 @@ function manageAppState() {
 
             // Sanitize the entire card body HTML string before insertion
             const sanitizedCardBodyHtml = DOMPurify.sanitize(`
-                <div class="card-content">
+                <div class="flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <div><b>Cable(s):</b> ${entry.Cable}</div>
+                        <div class="text-right"><b>${formattedDate}</b></div>
+                    </div>
+                    <div class="mb-4"><b>Location:</b> ${entry.Country}</div>
+                    <div class="mb-4"><p>${sanitizedDescriptionHtml}</p></div>
+                </div>
+            `);
+/*                <div class="card-content">
                     <div class="monthDate"><b>${formattedDate}</b></div>
                     <div class="info-row">
                         <div class="info-item"><span class="info-label">Cable(s): </span> <span class="info-value">${entry.Cable}</div>
@@ -216,7 +225,8 @@ function manageAppState() {
                     </div>
                     <div class="dateDescription"><p>${sanitizedDescriptionHtml}</p></div>
                 </div>
-            `);
+            */
+
             cardBody.innerHTML = sanitizedCardBodyHtml;
 
             // Create sanitised badges for each tag
