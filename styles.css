@@ -1142,8 +1142,8 @@ background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
 .card {
-  margin-bottom: 10px;
-  padding: 15px;
+  margin-bottom: 0.5rem;
+  padding: 1rem 2rem;
   border: 1px solid #000; /* Thin black border */
   border-radius: 0.25rem; /* Rounded corners */
 }
@@ -1175,31 +1175,12 @@ background-color: rgb(229 231 235 / var(--tw-bg-opacity));
   pointer-events: none; /* Ensures clicks pass through */
 }
 
-.card-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Creates two equal columns */
-  grid-template-rows: auto auto auto; /* Adjust based on content */
-  grid-template-areas: 
-    "monthDate monthDate"
-    "info1 info2"
-    "dateDescription dateDescription";
-  gap: 8px; /* Adjust the gap between grid items as needed */
+.justify-between {
+  justify-content: space-between; 
 }
 
-.monthDate {
-  grid-area: monthDate;
-  display: flex;
-  justify-content: flex-end; /* Aligns content to the right */
-}
-
-.info-row {
-  display: contents; /* Makes the direct children of.info-row participate in the grid layout */
-}
-
-.info-label {
-  font-weight: bold; /* Optional: Makes the labels bold */
-  justify-content: flex-start;
-
+.align-between {
+  align-content: space-between;
 }
 
 /* Target the first two.info-item elements to place them in the first row */
@@ -1226,3 +1207,30 @@ background-color: rgb(229 231 235 / var(--tw-bg-opacity));
   }
 }
 
+/*delete*/
+.card-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Creates two equal columns */
+  grid-template-rows: auto auto auto; /* Adjust based on content */
+  grid-template-areas: 
+    "monthDate monthDate"
+    "info1 info2"
+    "dateDescription dateDescription";
+  gap: 8px; /* Adjust the gap between grid items as needed */
+}
+
+.monthDate {
+  grid-area: monthDate;
+  display: flex;
+  justify-content: flex-end; /* Aligns content to the right */
+}
+
+.info-row {
+  display: contents; /* Makes the direct children of.info-row participate in the grid layout */
+}
+
+.info-label {
+  font-weight: bold; /* Optional: Makes the labels bold */
+  justify-content: flex-start;
+
+}
