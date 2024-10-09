@@ -28,5 +28,3 @@ Here's a breakdown of its core functionalities:
 6. **Sharing and Downloading Results**: There are features to share the current results page via copying the URL to the clipboard and downloading the filtered data as a CSV file.
 
 7. **Initialization and Event Handling**: The program initializes itself by loading the data, setting up the filters, and attaching event listeners to various UI elements (e.g., search box, filter dropdowns, buttons for applying filters, resetting filters, sharing results, downloading data). It also supports initialization from URL parameters, allowing users to bookmark or share specific searches/filter configurations.
-
-Overall, the program aims to provide a user-friendly interface for exploring and analyzing data on submarine cable incidents and events, offering robust filtering, searching, and sorting capabilities.
